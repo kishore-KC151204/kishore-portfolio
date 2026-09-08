@@ -1,10 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kishore Chandrasekaran — AI, ML & Data Science Engineer // PORTFOLIO</title>
-  <meta name="description" content="Kishore C - AI, Machine Learning, Data Science, Computer Vision, Robotics & Embedded Systems Engineering Portfolio" />
+  <title>Kishore C — AI, ML & Data Science Engineer // PORTFOLIO</title>
+  <meta name="description" content="Kishore C - AI, Machine Learning, Data Science, DevOps, Agentic AI, Full Stack, Computer Vision & Robotics" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -143,20 +144,112 @@
     #dev-hud { display: none; pointer-events: none; }
     #dev-hud.active { display: block; }
 
-    /* Print styling for PDF Download */
+    /* Animated Typewriter Cursor */
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 0.9em;
+      vertical-align: middle;
+      background-color: var(--sys-cyan);
+      margin-left: 2px;
+      animation: blink 0.8s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* ====================================================
+       CRITICAL: ATS-COMPLIANT PRINT & PDF FORMAT ENGINE
+       Eliminates multi-page overflow and blank pages
+       ==================================================== */
     @media print {
-      body * { visibility: hidden; }
-      #resume-modal, #resume-modal * { visibility: visible; }
-      #resume-modal {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        background: transparent !important;
-        border: none !important;
-        color: black !important;
+      @page {
+        size: A4 portrait;
+        margin: 10mm 12mm;
       }
-      .no-print { display: none !important; }
+      html, body {
+        width: 100% !important;
+        height: auto !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      /* Hide all website elements */
+      header, main, #dev-hud, #terminal-modal, #cert-modal, .no-print {
+        display: none !important;
+      }
+      /* Ensure resume modal behaves as pure document page */
+      #resume-modal {
+        position: static !important;
+        display: block !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+        border: none !important;
+        backdrop-filter: none !important;
+      }
+      #resume-dialog-box {
+        position: static !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+      }
+      #resume-sheet {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+        font-size: 9pt !important;
+        line-height: 1.35 !important;
+      }
+      #resume-sheet * {
+        color: #0f172a !important;
+        border-color: #cbd5e1 !important;
+        background-color: transparent !important;
+      }
+      #resume-sheet h1 {
+        color: #000000 !important;
+        font-size: 20pt !important;
+        line-height: 1.1 !important;
+        letter-spacing: -0.02em !important;
+      }
+      #resume-sheet h2 {
+        color: #0284c7 !important;
+        font-size: 9.5pt !important;
+        border-bottom: 1.5px solid #0284c7 !important;
+        padding-bottom: 2px !important;
+        margin-top: 10px !important;
+        margin-bottom: 5px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em !important;
+      }
+      .resume-section-block {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      a {
+        text-decoration: none !important;
+        color: #0284c7 !important;
+      }
     }
   </style>
 </head>
@@ -200,7 +293,7 @@
       <a href="#hero" class="flex items-center space-x-3 group" onclick="playAudio('click')">
         <div class="w-2.5 h-2.5 rounded-full bg-sys-blue group-hover:bg-sys-cyan transition-colors"></div>
         <span class="font-mono text-sm font-semibold tracking-wider text-sys-primary group-hover:text-sys-blue transition-colors">
-          KISHORE // PORTFOLIO
+          KISHORE <span class="text-sys-secondary">//</span> PORTFOLIO
         </span>
       </a>
 
@@ -215,8 +308,14 @@
         <a href="#contact" class="text-sys-secondary hover:text-sys-primary transition-colors">CONTACT</a>
       </nav>
 
-      <!-- Toggles & Customization Suite -->
+      <!-- Toggles & Quick Actions -->
       <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Resume Trigger in Navigation -->
+        <button onclick="openResumeModal()" class="px-2.5 py-1 rounded text-xs font-mono border border-sys-cyan/40 text-sys-cyan hover:bg-sys-cyan/10 transition-all flex items-center space-x-1.5" title="View & Download Kishore's Resume">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <span class="font-medium">RESUME</span>
+        </button>
+
         <button id="theme-mode-btn" onclick="toggleThemeMode()" class="p-1.5 sm:px-2.5 sm:py-1 rounded text-xs font-mono border border-white/10 text-sys-secondary hover:text-sys-primary hover:border-sys-blue transition-all flex items-center space-x-1.5" title="Toggle Light / Dark Mode">
           <span id="theme-mode-icon">🌙</span>
           <span id="theme-mode-text" class="hidden sm:inline">DARK</span>
@@ -275,9 +374,15 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         
         <div class="lg:col-span-7 space-y-6">
-          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sys-elevated border border-white/10 font-mono text-xs text-sys-secondary">
-            <span class="w-2 h-2 rounded-full bg-sys-blue"></span>
-            <span>AVAILABLE FOR ML, AI &amp; DATA SCIENCE ROLES</span>
+          
+          <!-- ANIMATION MOVING TYPEWRITER BADGE (REPLACED CGPA) -->
+          <div class="inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-sys-elevated border border-sys-blue/30 font-mono text-xs text-sys-cyan shadow-sm max-w-full">
+            <span class="w-2 h-2 rounded-full bg-sys-green pulse-dot flex-shrink-0"></span>
+            <span class="text-sys-secondary font-semibold flex-shrink-0 text-[10px] tracking-wider uppercase">STATUS:</span>
+            <span class="text-sys-primary font-medium tracking-wide flex items-center truncate">
+              <span id="typewriter-text" class="text-sys-cyan font-semibold"></span>
+              <span class="typing-cursor"></span>
+            </span>
           </div>
 
           <div class="space-y-2">
@@ -285,12 +390,12 @@
               KISHORE C
             </h1>
             <p class="font-mono text-sm sm:text-base text-sys-cyan tracking-wide">
-              AI • MACHINE LEARNING • DATA SCIENCE • ROBOTICS
+              AI/ML ENGINEER &amp; SYSTEMS DEVELOPER // SALEM, TAMIL NADU, INDIA
             </p>
           </div>
 
-          <p class="text-lg sm:text-xl text-sys-secondary max-w-xl font-light leading-relaxed">
-            I build systems that make machines understand, reason, and interact with the physical world.
+          <p class="text-base sm:text-lg text-sys-secondary max-w-xl font-light leading-relaxed">
+            Driven AI &amp; Data Science student and aspiring AI/ML Engineer with a proven track record of designing and deploying intelligent, data-driven systems.
           </p>
 
           <div class="pt-4 flex flex-wrap items-center gap-4">
@@ -299,7 +404,18 @@
               <span>→</span>
             </a>
 
-            <button onclick="focusKishoreAI()" class="px-6 py-3 rounded-lg bg-sys-card hover:bg-sys-elevated text-sys-primary border border-white/10 font-mono text-xs font-medium tracking-wider transition-all flex items-center space-x-2">
+            <!-- Direct Resume Buttons -->
+            <button onclick="openResumeModal()" class="px-5 py-3 rounded-lg bg-sys-elevated hover:bg-sys-blue text-sys-primary hover:text-white border border-white/10 font-mono text-xs font-medium tracking-wider transition-all flex items-center space-x-2">
+              <svg class="w-4 h-4 text-sys-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              <span>VIEW RESUME</span>
+            </button>
+
+            <button onclick="downloadResumePDF()" class="px-5 py-3 rounded-lg bg-sys-card hover:bg-sys-elevated text-sys-primary border border-white/10 font-mono text-xs font-medium tracking-wider transition-all flex items-center space-x-2">
+              <svg class="w-4 h-4 text-sys-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>DOWNLOAD RESUME (PDF)</span>
+            </button>
+
+            <button onclick="focusKishoreAI()" class="px-5 py-3 rounded-lg bg-sys-card hover:bg-sys-elevated text-sys-primary border border-white/10 font-mono text-xs font-medium tracking-wider transition-all flex items-center space-x-2">
               <span class="text-sys-cyan">⚡</span>
               <span>ASK KISHORE AI</span>
             </button>
@@ -326,8 +442,9 @@
           <div class="relative w-full max-w-md aspect-square bg-sys-card/50 rounded-2xl border border-white/10 overflow-hidden flex items-center justify-center group">
             <div id="atom-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
             
+            <!-- REPLACED ATOM_PHYSICS WITH Nav_Atom -->
             <div class="absolute top-4 left-4 font-mono text-[10px] text-sys-secondary bg-sys-surface/80 px-2.5 py-1 rounded border border-white/10 backdrop-blur-sm pointer-events-none">
-              DIGITAL GUIDE // <span id="avatar-pose-label" class="text-sys-cyan">ATOM_PHYSICS</span>
+              DIGITAL GUIDE // <span id="avatar-pose-label" class="text-sys-cyan font-bold tracking-wide">Nav_Atom</span>
             </div>
 
             <div id="avatar-radial" class="absolute inset-0 bg-sys-surface/90 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-6 space-y-3 pointer-events-none group-hover:pointer-events-auto">
@@ -341,7 +458,7 @@
             </div>
           </div>
           <p class="font-mono text-[11px] text-sys-secondary mt-3 text-center">
-            Interactive 3D Atom Mesh • Move Cursor to Alter Gravity
+            Interactive 3D Nav_Atom Mesh • Move Cursor to Alter Gravity
           </p>
         </div>
 
@@ -375,7 +492,7 @@
         <div id="ai-chat-window" class="bg-sys-surface border border-white/10 rounded-xl p-4 font-mono text-xs h-72 overflow-y-auto space-y-3 leading-relaxed">
           <div class="p-3 rounded-lg bg-sys-card border border-white/10 text-sys-secondary">
             <span class="text-sys-cyan font-bold block mb-1">&gt; KISHORE AI:</span>
-            Hello! I am Kishore's digital engineering assistant. Ask me about his machine learning & computer vision projects (Safe City, WACIAN, PDS), solve a math or engineering calculation, or query his experience at Unified Mentor, WebStack Academy, or Emertxe.
+            Hello! I am Kishore's digital engineering assistant. Ask me about his machine learning &amp; computer vision projects (Safe City, WACIAN, PDS), solve a math or engineering calculation, or query his experience and Deep Learning internship at OdugaaTech.
           </div>
         </div>
 
@@ -386,8 +503,8 @@
 
         <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
           <span class="text-sys-secondary text-[10px] mr-1">QUICK PROMPTS:</span>
-          <button onclick="askKishoreAI('What was Kishore\'s role at Unified Mentor?')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
-            "Experience at Unified Mentor"
+          <button onclick="askKishoreAI('What was Kishore\'s role at OdugaaTech?')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
+            "Internship at OdugaaTech"
           </button>
           <button onclick="askKishoreAI('Explain the WACIAN readiness concept')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
             "Explain WACIAN Platform"
@@ -395,8 +512,8 @@
           <button onclick="askKishoreAI('Calculate: If inference is 28ms, what is max theoretical FPS?')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
             "Calculate 28ms to FPS"
           </button>
-          <button onclick="askKishoreAI('Tell me about the Autonomous Self-Driving Car project.')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
-            "Self-Driving Car Project"
+          <button onclick="askKishoreAI('Tell me about SafeCity AI surveillance.')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
+            "SafeCity AI Architecture"
           </button>
         </div>
 
@@ -433,22 +550,21 @@
           </h3>
           
           <p class="text-sys-primary text-sm sm:text-base leading-relaxed font-light">
-            I am Kishore Chandrasekaran, an <strong>Artificial Intelligence, Machine Learning &amp; Data Science Engineer</strong> specializing in real-time computer vision, autonomous embedded hardware, and high-performance software systems.
+            I am <strong>Kishore C</strong>, an <strong>Artificial Intelligence &amp; Data Science student</strong> and aspiring <strong>AI/ML Engineer</strong> with a proven track record of designing and deploying intelligent, data-driven systems.
           </p>
 
           <blockquote class="border-l-2 border-sys-blue pl-4 py-1 text-sys-primary font-mono text-xs italic bg-sys-surface/50 rounded-r">
-            "Don't just read what I can build. Interact with it."
+            "Adept at translating complex data into actionable insights through advanced predictive modeling and computer vision techniques."
           </blockquote>
 
           <p class="text-sys-secondary text-xs sm:text-sm leading-relaxed">
-            My work bridges theoretical neural network architectures with constrained physical silicon. From training custom YOLOv8 models and writing camera frame-buffer queue managers to routing real-time I2C telemetry between microcontrollers, I design software that delivers measurable utility. 
-            I've applied these skills professionally through intensive internships at <strong>Unified Mentor</strong>, <strong>WebStack Academy</strong>, and <strong>Emertxe</strong>.
+            I combine analytical rigor with foundational software development expertise to architect end-to-end solutions, seamlessly bridging the gap between sophisticated machine learning models and scalable user applications. With hands-on experience in <strong>Convolutional Neural Networks (MNIST)</strong> at <strong>OdugaaTech</strong>, real-time <strong>YOLOv8 surveillance</strong> in <strong>SafeCity AI</strong>, and dual-processor robotics in the <strong>Personal Droid System</strong>.
           </p>
 
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-white/10 font-mono">
             <div class="bg-sys-surface p-3 rounded-lg border border-white/10">
               <div class="text-sys-secondary text-[10px]">CORE DISCIPLINES</div>
-              <div class="text-sys-primary text-xs font-semibold mt-1">AI / ML / Robotics</div>
+              <div class="text-sys-primary text-xs font-semibold mt-1">AI / ML / CV</div>
             </div>
             <div class="bg-sys-surface p-3 rounded-lg border border-white/10">
               <div class="text-sys-secondary text-[10px]">ACADEMIC TRACK</div>
@@ -470,32 +586,36 @@
 
             <ul class="mt-4 space-y-3 font-mono text-xs">
               <li class="flex justify-between text-sys-secondary border-b border-white/10 pb-2">
-                <span>Specialization:</span>
-                <span class="text-sys-primary font-medium">AI, ML, CV &amp; Robotics</span>
+                <span>Location:</span>
+                <span class="text-sys-primary font-medium">Salem, Tamil Nadu, India</span>
               </li>
               <li class="flex justify-between text-sys-secondary border-b border-white/10 pb-2">
-                <span>Core Languages:</span>
-                <span class="text-sys-primary font-medium">Python, C/C++, TypeScript, SQL</span>
+                <span>Education:</span>
+                <span class="text-sys-primary font-medium">B.Tech AI &amp; DS (2023 - 2027)</span>
               </li>
               <li class="flex justify-between text-sys-secondary border-b border-white/10 pb-2">
-                <span>ML &amp; Vision:</span>
-                <span class="text-sys-primary font-medium">YOLOv8, MediaPipe, OpenCV, PyTorch</span>
+                <span>College:</span>
+                <span class="text-sys-primary font-medium">Annapoorana Engg. College</span>
               </li>
               <li class="flex justify-between text-sys-secondary border-b border-white/10 pb-2">
-                <span>Embedded Hardware:</span>
-                <span class="text-sys-primary font-medium">Raspberry Pi 4, ESP32, I2C / PWM</span>
+                <span>AI / ML Stack:</span>
+                <span class="text-sys-primary font-medium">Python, TensorFlow, OpenCV, YOLOv8</span>
               </li>
               <li class="flex justify-between text-sys-secondary pb-1">
-                <span>Web Architecture:</span>
-                <span class="text-sys-primary font-medium">Flask, REST API, MERN Stack</span>
+                <span>Embedded &amp; Systems:</span>
+                <span class="text-sys-primary font-medium">ESP32, Raspberry Pi, FreeRTOS</span>
               </li>
             </ul>
           </div>
 
-          <div class="pt-4 border-t border-white/10">
-            <button onclick="openResumeModal()" class="w-full py-3 bg-sys-elevated hover:bg-sys-blue border border-white/10 text-sys-primary hover:text-white font-mono text-xs rounded-lg transition-all flex items-center justify-center space-x-2">
+          <div class="pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-2">
+            <button onclick="openResumeModal()" class="flex-1 py-3 bg-sys-blue hover:bg-sys-blue/90 text-white font-mono text-xs rounded-lg transition-all flex items-center justify-center space-x-2">
               <span>📄</span>
-              <span>INSPECT PROFILE &amp; RESUME DETAILS</span>
+              <span>VIEW RESUME</span>
+            </button>
+            <button onclick="downloadResumePDF()" class="flex-1 py-3 bg-sys-elevated hover:bg-sys-surface border border-white/10 text-sys-primary font-mono text-xs rounded-lg transition-all flex items-center justify-center space-x-2">
+              <span>📥</span>
+              <span>DOWNLOAD PDF</span>
             </button>
           </div>
         </div>
@@ -503,80 +623,180 @@
       </div>
     </section>
 
-    <!-- RESUME MODAL (Printable & Downloadable) -->
-    <div id="resume-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex justify-center items-center p-4 backdrop-blur-sm">
-      <div class="bg-sys-card border border-white/20 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 font-sans">
-        <div class="flex justify-between items-center border-b border-white/10 pb-4 no-print">
-          <div>
-            <h3 class="text-xl font-bold text-sys-primary">KISHORE C — CURRICULUM VITAE</h3>
-            <p class="font-mono text-xs text-sys-cyan">AI, Machine Learning &amp; Data Science Engineer</p>
+    <!-- ==========================================
+         RESUME MODAL (PROPER ATS SINGLE-PAGE PDF)
+         ========================================== -->
+    <div id="resume-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex justify-center items-center p-3 sm:p-6 backdrop-blur-sm overflow-y-auto">
+      <div id="resume-dialog-box" class="bg-sys-card border border-white/20 rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-hidden flex flex-col shadow-2xl font-sans">
+        
+        <!-- Modal Top Bar -->
+        <div class="flex justify-between items-center px-6 py-4 border-b border-white/10 bg-sys-elevated no-print">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-sys-cyan"></span>
+            <div>
+              <h3 class="text-sm font-mono font-bold text-sys-primary">KISHORE_C_RESUME.PDF</h3>
+              <p class="text-[11px] font-mono text-sys-secondary">Standard A4 ATS Format // Print &amp; PDF Ready</p>
+            </div>
           </div>
-          <button onclick="closeResumeModal()" class="text-sys-secondary hover:text-sys-primary font-mono text-xs bg-sys-surface px-3 py-1.5 rounded">
-            CLOSE ✕
-          </button>
+          <div class="flex items-center space-x-2">
+            <button onclick="downloadResumePDF()" class="px-3.5 py-1.5 bg-sys-blue hover:bg-sys-blue/90 text-white font-mono text-xs rounded transition-colors flex items-center space-x-1.5 shadow-sm">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>DOWNLOAD PDF</span>
+            </button>
+            <button onclick="closeResumeModal()" class="text-sys-secondary hover:text-sys-primary font-mono text-xs bg-sys-surface px-2.5 py-1.5 rounded transition-colors">
+              ✕
+            </button>
+          </div>
         </div>
 
-        <div class="space-y-6 font-mono text-xs text-sys-secondary" id="resume-print-content">
-          <!-- Name Header for Print -->
-          <div class="hidden print:block mb-6 border-b border-black pb-2">
-            <h1 class="text-2xl font-bold text-black">KISHORE CHANDRASEKARAN</h1>
-            <p class="text-sm">AI, Machine Learning & Data Science Engineer</p>
-            <p class="text-xs mt-1">kishore.ai@example.com | linkedin.com/in/kishore-c | github.com/kishore-c</p>
-          </div>
-
-          <div>
-            <h4 class="text-sys-primary font-bold text-sm mb-2 text-sys-blue print:text-black">// EDUCATION</h4>
-            <p class="text-sys-primary print:text-black">Bachelor of Technology in Artificial Intelligence &amp; Data Science</p>
-            <p>Focus Areas: Machine Learning, Deep Neural Networks, Computer Vision, Embedded Systems, Real-time Stream Analytics.</p>
-          </div>
-
-          <div>
-            <h4 class="text-sys-primary font-bold text-sm mb-2 text-sys-blue print:text-black">// PROFESSIONAL EXPERIENCE & INTERNSHIPS</h4>
-            <div class="space-y-3">
-              <div>
-                <p class="text-sys-primary font-bold print:text-black">Machine Learning & AI Intern <span class="text-sys-secondary font-normal">| Unified Mentor</span></p>
-                <p class="mt-1">Designed and validated Python-based Machine Learning models, optimization pipelines, and computer vision utilities.</p>
-              </div>
-              <div>
-                <p class="text-sys-primary font-bold print:text-black">AI/ML & Full-Stack Intern <span class="text-sys-secondary font-normal">| Emertxe Information Technologies</span></p>
-                <p class="mt-1">Participated in structured virtual integration of AI models into functional full-stack web architectures.</p>
-              </div>
-              <div>
-                <p class="text-sys-primary font-bold print:text-black">MERN Stack Intern <span class="text-sys-secondary font-normal">| WebStack Academy</span></p>
-                <p class="mt-1">Developed "Food Genie", a full-stack web application utilizing MongoDB, Express, React, and Node.js.</p>
-              </div>
-              <div>
-                <p class="text-sys-primary font-bold print:text-black">Full Stack Development Intern <span class="text-sys-secondary font-normal">| EdVyro</span></p>
-                <p class="mt-1">Specialized in responsive front-end interfaces and backend data routing.</p>
-              </div>
+        <!-- Printable & Viewable Document Body (A4 ATS Standard) -->
+        <div class="overflow-y-auto p-6 sm:p-8 space-y-4 bg-sys-surface font-sans text-xs leading-relaxed" id="resume-sheet">
+          
+          <!-- Resume Header -->
+          <div class="border-b border-white/10 pb-3 text-center sm:text-left space-y-1.5 resume-section-block">
+            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-sys-primary font-mono">KISHORE C</h1>
+            <p class="font-mono text-xs text-sys-cyan font-medium">Salem, Tamil Nadu, India | kishore15122004@gmail.com | +91 6379711816</p>
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 font-mono text-[11px] text-sys-secondary pt-0.5">
+              <a href="https://github.com/kishore-KC151204" target="_blank" rel="noopener noreferrer" class="text-sys-green hover:underline">github.com/kishore-KC151204</a>
+              <span>•</span>
+              <a href="https://linkedin.com/in/kishore-c04" target="_blank" rel="noopener noreferrer" class="text-sys-blue hover:underline">linkedin.com/in/kishore-c04</a>
             </div>
           </div>
 
-          <div>
-            <h4 class="text-sys-primary font-bold text-sm mb-2 text-sys-blue print:text-black">// TECHNICAL SUITE</h4>
-            <p>• Machine Learning &amp; AI: Supervised/Unsupervised Learning, Neural Network Training, Quantization, Evaluation Metrics</p>
-            <p>• Computer Vision: Real-time Object Detection (YOLOv8), MediaPipe Hands/Pose, OpenCV Matrix Operations</p>
-            <p>• Robotics &amp; Hardware: Raspberry Pi 4, ESP32, 24GHz Human Motion Radar, Micro LiPo integration</p>
-            <p>• Full-Stack &amp; Data: Python (Flask), TypeScript, MERN Stack, MySQL, Git, Docker</p>
+          <!-- Section: Professional Summary -->
+          <div class="space-y-1 resume-section-block">
+            <h2 class="text-xs font-mono font-bold tracking-wider text-sys-cyan uppercase border-b border-white/10 pb-0.5">
+              PROFESSIONAL SUMMARY
+            </h2>
+            <p class="text-sys-primary font-sans leading-relaxed text-xs">
+              Driven AI &amp; Data Science student and aspiring AI/ML Engineer with a proven track record of designing and deploying intelligent, data-driven systems. Adept at translating complex data into actionable insights through advanced predictive modeling and computer vision techniques. Combines analytical rigor with foundational software development expertise to architect end-to-end solutions, seamlessly bridging the gap between sophisticated machine learning models and scalable user applications. A strategic problem-solver and collaborative technical leader dedicated to continuous innovation.
+            </p>
           </div>
 
-          <div>
-            <h4 class="text-sys-primary font-bold text-sm mb-2 text-sys-blue print:text-black">// FEATURED PROJECTS</h4>
-            <p>• <strong>Safe City AI:</strong> Real-time incident & hazard detection with sub-33ms frame latency optimization</p>
-            <p>• <strong>Personal Droid System (PDS):</strong> Multi-processor robotics architecture separating vision from motor interrupts</p>
-            <p>• <strong>WACIAN:</strong> Cognitive pre-work mental readiness platform with 5-tier adaptive problem progression</p>
-            <p>• <strong>Autonomous Self-Driving Car:</strong> Hardware circuit design utilizing 24GHz radar sensors and embedded micro-controllers</p>
+          <!-- Section: Technical Skills -->
+          <div class="space-y-1 resume-section-block">
+            <h2 class="text-xs font-mono font-bold tracking-wider text-sys-cyan uppercase border-b border-white/10 pb-0.5">
+              TECHNICAL SKILLS
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px]">
+              <div><strong class="text-sys-primary">AI/ML:</strong> <span class="text-sys-secondary">Python, TensorFlow, OpenCV, YOLOv8, scikit-learn, Pandas, NumPy, Generative AI</span></div>
+              <div><strong class="text-sys-primary">Backend &amp; Frontend:</strong> <span class="text-sys-secondary">Flask, REST API design, React, HTML5, CSS3, JavaScript</span></div>
+              <div><strong class="text-sys-primary">Databases:</strong> <span class="text-sys-secondary">MySQL, relational schema design</span></div>
+              <div><strong class="text-sys-primary">Embedded &amp; Systems:</strong> <span class="text-sys-secondary">ESP32, Raspberry Pi, FreeRTOS, sensor fusion</span></div>
+              <div><strong class="text-sys-primary">Tools &amp; Platforms:</strong> <span class="text-sys-secondary">Git, GitHub, VS Code, Linux, AWS, GCP</span></div>
+              <div><strong class="text-sys-primary">Core CS:</strong> <span class="text-sys-secondary">Data Structures &amp; Algorithms, SQL</span></div>
+            </div>
+          </div>
+
+          <!-- Section: Internship -->
+          <div class="space-y-1.5 resume-section-block">
+            <h2 class="text-xs font-mono font-bold tracking-wider text-sys-cyan uppercase border-b border-white/10 pb-0.5">
+              INTERNSHIP
+            </h2>
+            <div class="flex justify-between items-baseline font-mono text-xs">
+              <span class="font-bold text-sys-primary">Deep Learning Internship — <span class="text-sys-blue font-semibold">OdugaaTech, Salem</span></span>
+              <span class="text-sys-secondary text-[11px]">15 Days</span>
+            </div>
+            <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
+              <li>Completed hands-on training in neural network fundamentals, activation/loss functions, and gradient-based optimization.</li>
+              <li>Independently built and trained a Convolutional Neural Network (CNN) for handwritten digit classification on the MNIST dataset.</li>
+            </ul>
+          </div>
+
+          <!-- Section: Projects -->
+          <div class="space-y-2 resume-section-block">
+            <h2 class="text-xs font-mono font-bold tracking-wider text-sys-cyan uppercase border-b border-white/10 pb-0.5">
+              PROJECTS
+            </h2>
+            
+            <div class="space-y-0.5">
+              <div class="font-mono font-bold text-sys-primary text-xs">WACIAN — AI-Driven Analysis Platform</div>
+              <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
+                <li>Developed an advanced machine learning model to process and predict complex data patterns, enhancing decision-making accuracy.</li>
+                <li>Streamlined the data pipeline and integrated the predictive model into a scalable backend architecture for real-time performance.</li>
+              </ul>
+            </div>
+
+            <div class="space-y-0.5">
+              <div class="font-mono font-bold text-sys-primary text-xs">SafeCity AI — Smart Surveillance System</div>
+              <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
+                <li>Engineered a real-time computer vision system to detect incidents, annotate events, and automatically log records for live monitoring.</li>
+                <li>Developed a backend-driven alert system and dashboard to manage incidents and enable rapid emergency response.</li>
+              </ul>
+            </div>
+
+            <div class="space-y-0.5">
+              <div class="flex justify-between items-baseline font-mono text-xs">
+                <span class="font-bold text-sys-primary">Personal Droid System — Team Project</span>
+                <span class="text-sys-amber text-[11px] font-semibold">Ongoing</span>
+              </div>
+              <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
+                <li>Architected a dual-processor embedded hardware system to drive a custom control and vision pipeline.</li>
+                <li>Authored comprehensive product design specifications detailing the system architecture, integration, and evaluation metrics.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Section: Education -->
+          <div class="space-y-1.5 resume-section-block">
+            <h2 class="text-xs font-mono font-bold tracking-wider text-sys-cyan uppercase border-b border-white/10 pb-0.5">
+              EDUCATION
+            </h2>
+            <div class="flex justify-between items-start font-mono text-xs">
+              <div>
+                <div class="font-bold text-sys-primary">Bachelor of Technology AI &amp; Data Science</div>
+                <div class="text-sys-secondary">Annapoorana Engineering College | <span class="text-sys-green font-semibold">GPA: 8/10</span></div>
+              </div>
+              <div class="text-sys-secondary text-[11px]">2023 - 2027</div>
+            </div>
+            <div class="flex justify-between items-start font-mono text-xs pt-0.5">
+              <div>
+                <div class="text-sys-primary font-medium">Higher Secondary Education — Maths &amp; Biology</div>
+                <div class="text-sys-secondary">Sri Vidyaa Mandir Higher Secondary School | Percentage: 63%</div>
+              </div>
+              <div class="text-sys-secondary text-[11px]">2021 - 2022</div>
+            </div>
+          </div>
+
+          <!-- Section: Certifications & Achievements -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5 resume-section-block">
+            <div class="space-y-1">
+              <h2 class="text-xs font-mono font-bold tracking-wider text-sys-cyan uppercase border-b border-white/10 pb-0.5">
+                CERTIFICATIONS
+              </h2>
+              <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
+                <li>Web Application Development — George Academy</li>
+                <li>Prompt Engineering for ChatGPT — Great Learning</li>
+              </ul>
+            </div>
+
+            <div class="space-y-1">
+              <h2 class="text-xs font-mono font-bold tracking-wider text-sys-cyan uppercase border-b border-white/10 pb-0.5">
+                ACHIEVEMENTS
+              </h2>
+              <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
+                <li>Won 3rd prize in Intra-College Hackathon &amp; Visionary Innovators by Supporticon Hackfest (AI Accident Detection).</li>
+                <li>Participated in Generative AI Application Workshop by ISTE-BNY &amp; presented research paper at national conference.</li>
+                <li>Project Expo Coordinator (pre-final year) &amp; Student Secretary, AI &amp; DS Dept. (final year).</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Modal Bottom Bar -->
+        <div class="p-4 border-t border-white/10 bg-sys-card flex justify-between items-center font-mono text-xs no-print">
+          <div class="flex items-center space-x-2 text-sys-secondary">
+            <span class="w-2 h-2 rounded-full bg-sys-green"></span>
+            <span>CLEAN A4 ATS EXPORT (NO OVERFLOW)</span>
+          </div>
+          <div class="flex space-x-2">
+            <button onclick="downloadResumePDF()" class="px-4 py-2 bg-sys-blue hover:bg-sys-blue/90 text-white rounded font-medium transition-colors shadow-sm">
+              PRINT / SAVE AS PDF
+            </button>
           </div>
         </div>
 
-        <div class="pt-4 border-t border-white/10 flex justify-end space-x-3 no-print">
-          <button onclick="window.print()" class="px-4 py-2 bg-sys-elevated border border-white/10 text-sys-primary font-mono text-xs rounded hover:text-white transition-colors">
-            DOWNLOAD / PRINT PDF
-          </button>
-          <a href="#contact" onclick="closeResumeModal()" class="px-4 py-2 bg-sys-blue text-white font-mono text-xs rounded hover:bg-sys-blue/90 transition-colors">
-            CONTACT DIRECTLY
-          </a>
-        </div>
       </div>
     </div>
 
@@ -1155,53 +1375,89 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Transmit Message Form -->
           <form onsubmit="handleContactSubmit(event)" class="lg:col-span-7 space-y-4 font-mono text-xs">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="text-sys-secondary text-[10px] block mb-1">NAME</label>
-                <input type="text" required class="w-full bg-sys-surface border border-white/10 rounded-lg px-4 py-3 text-sys-primary focus:outline-none focus:border-sys-blue transition-colors" placeholder="e.g. Elena Rostova" />
-              </div>
-              <div>
-                <label class="text-sys-secondary text-[10px] block mb-1">EMAIL</label>
-                <input type="email" required class="w-full bg-sys-surface border border-white/10 rounded-lg px-4 py-3 text-sys-primary focus:outline-none focus:border-sys-blue transition-colors" placeholder="e.g. elena@research.org" />
-              </div>
-            </div>
-
             <div>
-              <label class="text-sys-secondary text-[10px] block mb-1">PROJECT DETAILS / ROLE</label>
-              <textarea rows="4" required class="w-full bg-sys-surface border border-white/10 rounded-lg px-4 py-3 text-sys-primary focus:outline-none focus:border-sys-blue transition-colors" placeholder="Describe your challenge, internship/job role, or technical problem..."></textarea>
+              <label class="text-sys-secondary text-[10px] block mb-1 uppercase tracking-wider">PROJECT DETAILS / ROLE</label>
+              <textarea id="contact-message-input" rows="5" required class="w-full bg-sys-surface border border-white/10 rounded-xl p-4 text-sys-primary font-mono text-xs focus:outline-none focus:border-sys-blue transition-colors placeholder:text-sys-secondary/60 resize-y" placeholder="Describe your challenge, internship/job role, or technical problem..."></textarea>
             </div>
 
-            <button type="submit" class="w-full py-3.5 bg-sys-blue hover:bg-sys-blue/90 text-white font-mono text-xs rounded-lg transition-all font-medium shadow-lg shadow-sys-blue/20">
-              TRANSMIT MESSAGE →
+            <button type="submit" id="transmit-btn" class="w-full py-3.5 bg-sys-blue hover:bg-sys-blue/90 text-white font-mono text-xs rounded-xl transition-all font-medium shadow-lg shadow-sys-blue/20 flex items-center justify-center space-x-2">
+              <span>TRANSMIT MESSAGE</span>
+              <span>→</span>
             </button>
-            <div id="contact-success" class="hidden text-sys-green font-mono text-xs text-center">
-              Message logged to Kishore // Portfolio interface.
+            
+            <div id="contact-success" class="hidden p-3 rounded-lg border border-sys-green/40 bg-sys-surface text-sys-green font-mono text-xs text-center">
+              [✓] Message routed directly to kishore15122004@gmail.com
             </div>
           </form>
 
-          <div class="lg:col-span-5 bg-sys-surface border border-white/10 rounded-xl p-6 space-y-4 font-mono text-xs">
-            <span class="text-sys-cyan font-bold block border-b border-white/10 pb-2">// DIRECT ACCESS</span>
+          <!-- Direct Access -->
+          <div class="lg:col-span-5 bg-sys-surface border border-white/10 rounded-2xl p-6 space-y-4 font-mono text-xs">
+            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+              <span class="text-sys-cyan font-bold tracking-wider">// DIRECT ACCESS</span>
+              <span class="text-[10px] text-sys-secondary">VERIFIED CONTACTS</span>
+            </div>
 
             <div class="space-y-3">
-              <a href="mailto:kishore.ai@example.com" class="flex justify-between items-center text-sys-secondary hover:text-sys-primary transition-colors p-2.5 rounded bg-sys-card border border-white/10">
-                <span>EMAIL:</span>
-                <span class="text-sys-primary font-bold">kishore.ai@example.com</span>
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener" class="flex justify-between items-center text-sys-secondary hover:text-sys-primary transition-colors p-2.5 rounded bg-sys-card border border-white/10">
-                <span>LINKEDIN:</span>
-                <span class="text-sys-cyan">linkedin.com/in/kishore-c</span>
-              </a>
-              <a href="https://github.com" target="_blank" rel="noopener" class="flex justify-between items-center text-sys-secondary hover:text-sys-primary transition-colors p-2.5 rounded bg-sys-card border border-white/10">
-                <span>GITHUB:</span>
-                <span class="text-sys-cyan">github.com/kishore-c</span>
-              </a>
+              <!-- EMAIL -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-sys-card border border-white/10 group hover:border-sys-blue/50 transition-colors">
+                <div class="flex items-center space-x-2.5 overflow-hidden">
+                  <span class="text-sys-secondary text-xs shrink-0 font-medium">EMAIL:</span>
+                  <a href="mailto:kishore15122004@gmail.com" class="text-sys-primary font-bold hover:text-sys-cyan transition-colors truncate">
+                    kishore15122004@gmail.com
+                  </a>
+                </div>
+                <button onclick="copyToClipboard('kishore15122004@gmail.com', this)" class="self-end sm:self-auto px-2 py-1 text-[10px] rounded bg-sys-elevated hover:bg-sys-surface border border-white/10 text-sys-secondary hover:text-sys-primary transition-all">
+                  COPY
+                </button>
+              </div>
+
+              <!-- LINKEDIN -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-sys-card border border-white/10 group hover:border-sys-cyan/50 transition-colors">
+                <div class="flex items-center space-x-2.5 overflow-hidden">
+                  <span class="text-sys-secondary text-xs shrink-0 font-medium">LINKEDIN:</span>
+                  <a href="https://linkedin.com/in/kishore-c04" target="_blank" rel="noopener noreferrer" class="text-sys-cyan hover:underline truncate">
+                    linkedin.com/in/kishore-c04
+                  </a>
+                </div>
+                <a href="https://linkedin.com/in/kishore-c04" target="_blank" rel="noopener noreferrer" class="self-end sm:self-auto px-2 py-1 text-[10px] rounded bg-sys-elevated hover:bg-sys-surface border border-white/10 text-sys-cyan transition-all">
+                  OPEN ↗
+                </a>
+              </div>
+
+              <!-- GITHUB -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-sys-card border border-white/10 group hover:border-sys-green/50 transition-colors">
+                <div class="flex items-center space-x-2.5 overflow-hidden">
+                  <span class="text-sys-secondary text-xs shrink-0 font-medium">GITHUB:</span>
+                  <a href="https://github.com/kishore-KC151204" target="_blank" rel="noopener noreferrer" class="text-sys-green hover:underline truncate">
+                    github.com/kishore-KC151204
+                  </a>
+                </div>
+                <a href="https://github.com/kishore-KC151204" target="_blank" rel="noopener noreferrer" class="self-end sm:self-auto px-2 py-1 text-[10px] rounded bg-sys-elevated hover:bg-sys-surface border border-white/10 text-sys-green transition-all">
+                  EXPLORE ↗
+                </a>
+              </div>
+
+              <!-- PHONE & LOCATION -->
+              <div class="p-3 rounded-xl bg-sys-card border border-white/10 flex flex-col sm:flex-row justify-between text-[11px] text-sys-secondary gap-1">
+                <div class="flex items-center space-x-1.5 text-sys-primary">
+                  <span>📞</span>
+                  <span>+91 6379711816</span>
+                </div>
+                <div class="flex items-center space-x-1.5 text-sys-secondary">
+                  <span>📍</span>
+                  <span>Salem, Tamil Nadu, India</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
       </div>
 
+      <!-- Footer -->
       <footer class="flex flex-col sm:flex-row justify-between items-center font-mono text-xs text-sys-secondary pt-8 border-t border-white/10">
         <div>KISHORE C // AI, ML &amp; DATA SCIENCE ENGINEER</div>
         <div class="mt-2 sm:mt-0 text-[10px]">MINIMAL SURFACE. DEEP INTERACTION. © 2026</div>
@@ -1260,10 +1516,44 @@
     }
 
     /* ----------------------------------------------------
-       02. THEME & CUSTOMIZATION ENGINE
+       02. TYPEWRITER ANIMATION FOR AVAILABLE ROLES
+       ---------------------------------------------------- */
+    const typewriterPhrase = "Available for AI and ML Engineer, Data Science, DevOps, Agentic AI, and Full Stack";
+    let twIndex = 0;
+    let twIsDeleting = false;
+
+    function initTypewriter() {
+      const target = document.getElementById('typewriter-text');
+      if (!target) return;
+
+      const current = typewriterPhrase.substring(0, twIndex);
+      target.innerText = current;
+
+      let speed = 40;
+
+      if (!twIsDeleting && twIndex < typewriterPhrase.length) {
+        twIndex++;
+        speed = 45;
+      } else if (!twIsDeleting && twIndex === typewriterPhrase.length) {
+        // Pause at full text
+        speed = 3500;
+        twIsDeleting = true;
+      } else if (twIsDeleting && twIndex > 0) {
+        twIndex--;
+        speed = 20;
+      } else if (twIsDeleting && twIndex === 0) {
+        twIsDeleting = false;
+        speed = 500;
+      }
+
+      setTimeout(initTypewriter, speed);
+    }
+
+    /* ----------------------------------------------------
+       03. THEME & CUSTOMIZATION ENGINE
        ---------------------------------------------------- */
     const systemState = {
-      themeMode: 'dark', // 'dark' or 'light'
+      themeMode: 'dark',
       accentTheme: 'default',
       labMode: false,
       cameraActive: false,
@@ -1322,7 +1612,6 @@
         if (hudTheme) hudTheme.innerText = 'DARK';
       }
 
-      // Update Atom Nucleus Color dynamically based on theme
       if (avatarMesh && avatarMesh.material) {
         avatarMesh.material.color.setHex(mode === 'light' ? 0x0071E3 : 0x141518);
       }
@@ -1394,6 +1683,8 @@
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         document.getElementById('terminal-modal').classList.add('hidden');
+        closeResumeModal();
+        closeCertModal();
       } else {
         keySeq += e.key.toUpperCase();
         if (keySeq.length > 7) keySeq = keySeq.substring(keySeq.length - 7);
@@ -1420,13 +1711,17 @@
 
         const resp = document.createElement('p');
         resp.className = 'text-sys-cyan';
-        if (val === 'help') resp.innerText = "Commands: theme, projects, skills, lab, whoami, clear";
+        if (val === 'help') resp.innerText = "Commands: theme, projects, resume, contact, lab, whoami, clear";
         else if (val === 'theme') {
           toggleThemeMode();
           resp.innerText = `Switched theme mode to ${systemState.themeMode.toUpperCase()}.`;
         }
+        else if (val === 'resume') {
+          openResumeModal();
+          resp.innerText = "Opened Kishore's Resume modal.";
+        }
         else if (val === 'projects') resp.innerText = "Active: [1] Safe City AI [2] Personal Droid System [3] WACIAN Platform";
-        else if (val === 'whoami') resp.innerText = "Kishore C — AI, Machine Learning & Data Science Engineer";
+        else if (val === 'whoami') resp.innerText = "Kishore C — AI, Machine Learning & Data Science Engineer (Salem, India)";
         else if (val === 'clear') { out.innerHTML = ''; e.target.value = ''; return; }
         else resp.innerText = `Command '${val}' not found. Type 'help'.`;
 
@@ -1437,11 +1732,11 @@
     });
 
     /* ----------------------------------------------------
-       03. THREE.JS SPATIAL ATOM PHYSICS ANIMATION
+       04. THREE.JS SPATIAL ATOM PHYSICS ANIMATION (Nav_Atom)
        ---------------------------------------------------- */
     let avatarScene, avatarCamera, avatarRenderer, avatarMesh, mainGroup;
     let orbit1, orbit2, orbit3;
-    let e1, e2, e3; // electrons
+    let e1, e2, e3;
     let targetMouseX = 0, targetMouseY = 0;
     let isClickingAvatar = false;
 
@@ -1547,22 +1842,18 @@
         orbit3.rotation.z += 0.006;
 
         // 4. Electron Trajectories
-        // Sync electrons to the orbits by applying the group's world matrix
-        const r = 1.5; // orbit radius
+        const r = 1.5;
         
-        // Electron 1 on Orbit 1
         const pos1 = new THREE.Vector3(Math.cos(t * 1.5) * r, Math.sin(t * 1.5) * r, 0);
         pos1.applyEuler(orbit1.rotation);
         pos1.applyMatrix4(mainGroup.matrixWorld);
         e1.position.copy(pos1);
 
-        // Electron 2 on Orbit 2
         const pos2 = new THREE.Vector3(Math.cos(t * 2.0) * r, Math.sin(t * 2.0) * r, 0);
         pos2.applyEuler(orbit2.rotation);
         pos2.applyMatrix4(mainGroup.matrixWorld);
         e2.position.copy(pos2);
 
-        // Electron 3 on Orbit 3
         const pos3 = new THREE.Vector3(Math.cos(t * 2.5) * r, Math.sin(t * 2.5) * r, 0);
         pos3.applyEuler(orbit3.rotation);
         pos3.applyMatrix4(mainGroup.matrixWorld);
@@ -1578,7 +1869,7 @@
     }
 
     /* ----------------------------------------------------
-       04. ASK KISHORE COGNITIVE AI ASSISTANT
+       05. ASK KISHORE COGNITIVE AI ASSISTANT
        ---------------------------------------------------- */
     function focusKishoreAI() {
       document.getElementById('kishore-ai-section').scrollIntoView({ behavior: 'smooth' });
@@ -1590,31 +1881,12 @@
       document.getElementById('ai-form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
     }
 
-    const aiPromptInstruction = `You are KISHORE AI, the personal cognitive AI assistant for Kishore Chandrasekaran's portfolio.
-Profile: Kishore C is an Artificial Intelligence, Machine Learning & Data Science Engineer focused on Computer Vision, Robotics, and Embedded Systems.
-Internships & Experience:
-- Unified Mentor: Machine Learning & AI Intern (Python, ML models).
-- WebStack Academy: MERN Stack Intern (Developed "Food Genie").
-- Emertxe Information Technologies: AI/ML & Full-Stack Intern.
-- EdVyro: Full Stack Development Intern.
-Projects:
-1. Safe City AI: Real-time hazard/incident detection with YOLOv8, OpenCV buffer tuning (<33ms), Flask, MySQL.
-2. Personal Droid System (PDS): Autonomous robot with Raspberry Pi 4 (Vision brain) + ESP32 (PWM motor control via I2C at 400kHz).
-3. WACIAN: Pre-work readiness mental activation platform ("Awaken. Prepare. Perform.") with a progressive 5-tier question progression.
-4. Autonomous Self-Driving Car: Hardware circuit design with 24GHz radar sensors and micro LiPo batteries.
-
-Cognitive Persona:
-You can solve mathematical calculations, explain complex machine learning/deep learning algorithms, discuss domain engineering questions, answer general science/computing queries, and explain Kishore's technical background.
-If you suggest inspecting a specific section, append exactly one tag at the very end of your response: [NAV:PROJECTS], [NAV:CAPABILITIES], [NAV:LAB], [NAV:IDENTITY], [NAV:CONTACT], [NAV:GESTURES].`;
-
-    let aiChatMemory = [];
-
     function localCognitiveEngine(query) {
       const q = query.toLowerCase();
 
       if (q.includes('calculate') || q.includes('fps') || q.match(/\d+[\s\+\-\*\/]\d+/)) {
         if (q.includes('28ms') || (q.includes('28') && q.includes('fps'))) {
-          return "Calculation: Theoretical Maximum FPS = 1000ms / 28ms ≈ 35.71 FPS. In practice, with a single-frame buffer and display overhead, Safe City AI runs steadily at ~30 FPS.";
+          return "Calculation: Theoretical Maximum FPS = 1000ms / 28ms ≈ 35.71 FPS. In practice, with a single-frame buffer and display overhead, SafeCity AI runs steadily at ~30 FPS.";
         }
         try {
           const sanitized = query.replace(/[^0-9+\-*/().]/g, '');
@@ -1625,26 +1897,26 @@ If you suggest inspecting a specific section, append exactly one tag at the very
         } catch(e) {}
       }
 
-      if (q.includes('unified mentor')) {
-        return "At Unified Mentor, Kishore served as a Machine Learning & AI Intern, focusing on Python development, neural network implementations, and building machine learning evaluation pipelines. [NAV:IDENTITY]";
-      }
-      if (q.includes('self-driving') || q.includes('car') || q.includes('radar')) {
-        return "Kishore engineered the hardware circuit design for an Autonomous Self-Driving Car mini-project, integrating 24GHz human motion radar sensors and micro LiPo batteries for embedded environment navigation. [NAV:IDENTITY]";
+      if (q.includes('odugaatech') || q.includes('odugaa') || q.includes('internship') || q.includes('mnist')) {
+        return "At OdugaaTech in Salem, Kishore completed an intensive 15-day Deep Learning internship covering neural network fundamentals, activation & loss functions, and gradient-based optimization, independently building and training a CNN on the MNIST handwritten digit dataset. [NAV:IDENTITY]";
       }
       if (q.includes('wacian') || q.includes('awaken')) {
-        return "WACIAN ('Awaken. Prepare. Perform.') is Kishore's pre-work mental readiness platform. Rather than testing users, it provides a 5-question warm-up spanning Basic Knowledge → Reasoning → Intermediate → Advanced → Domain Problem Solving to activate focus before work begins. [NAV:PROJECTS]";
+        return "WACIAN ('Awaken. Prepare. Perform.') is Kishore's AI-driven analysis and pre-work mental readiness platform. It transitions users from passive browsing to focused cognitive problem-solving via a 5-question adaptive warm-up. [NAV:PROJECTS]";
       }
-      if (q.includes('safe city') || q.includes('cctv') || q.includes('rtsp')) {
-        return "Safe City AI performs real-time incident detection using YOLOv8. The key engineering innovation was constraining OpenCV's stream buffer depth to 1 frame, preventing frame queue latency and maintaining a sub-33ms response time. [NAV:PROJECTS]";
+      if (q.includes('safe city') || q.includes('safecity') || q.includes('cctv')) {
+        return "SafeCity AI performs real-time incident detection using YOLOv8 and OpenCV. By setting buffer size to 1, Kishore eliminated cumulative stream lag, achieving real-time incident logging and emergency alerting. [NAV:PROJECTS]";
       }
       if (q.includes('droid') || q.includes('pds') || q.includes('robot') || q.includes('esp32')) {
-        return "The Personal Droid System (PDS) decouples compute: a Raspberry Pi 4 runs high-level computer vision and voice models, while an ESP32 handles motor PWM interrupts and ultrasonic sensor polling via a 400kHz I2C bus. [NAV:PROJECTS]";
+        return "The Personal Droid System (PDS) is a dual-processor embedded system: a Raspberry Pi 4 handles vision and intelligence while an ESP32 manages real-time FreeRTOS motor PWM and sensor interrupts over a 400kHz I2C bus. [NAV:PROJECTS]";
       }
-      if (q.includes('resume') || q.includes('experience') || q.includes('internship')) {
-        return "Kishore has completed internships at Unified Mentor (ML & AI), Emertxe (AI & Full Stack), WebStack Academy (MERN stack), and EdVyro. You can download his full PDF CV from the Identity module. [NAV:IDENTITY]";
+      if (q.includes('resume') || q.includes('cv') || q.includes('download')) {
+        return "You can view or download Kishore's verified ATS resume directly by clicking the 'VIEW RESUME' or 'DOWNLOAD RESUME (PDF)' buttons. [NAV:IDENTITY]";
+      }
+      if (q.includes('contact') || q.includes('email') || q.includes('github') || q.includes('linkedin')) {
+        return "You can reach Kishore directly via email at kishore15122004@gmail.com, explore his code on GitHub (github.com/kishore-KC151204), or connect on LinkedIn (linkedin.com/in/kishore-c04). [NAV:CONTACT]";
       }
 
-      return `Analyzing query regarding "${query}". Kishore builds applied Machine Learning, Computer Vision, and Embedded AI systems. You can inspect his projects, review the lab simulations, or test gesture detection live on this page! [NAV:PROJECTS]`;
+      return `Analyzing query regarding "${query}". Kishore C is an AI/ML Engineer and B.Tech AI & Data Science student available for AI & ML, Data Science, DevOps, Agentic AI, and Full Stack roles. Feel free to explore his projects, inspect his interactive resume, or test the live lab and gesture engine! [NAV:PROJECTS]`;
     }
 
     async function handleAISubmit(e) {
@@ -1667,33 +1939,11 @@ If you suggest inspecting a specific section, append exactly one tag at the very
 
       thinkingHUD.classList.remove('hidden');
 
-      aiChatMemory.push({ role: "user", parts: [{ text: query }] });
-
       let responseText = "";
       let targetSection = "";
 
-      const apiKey = ""; // Optional Gemini API key
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-      if (apiKey) {
-        try {
-          const res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              systemInstruction: { parts: [{ text: aiPromptInstruction }] },
-              contents: aiChatMemory
-            })
-          });
-          const json = await res.json();
-          responseText = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
-        } catch(err) {
-          responseText = localCognitiveEngine(query);
-        }
-      } else {
-        await new Promise(r => setTimeout(r, 400));
-        responseText = localCognitiveEngine(query);
-      }
+      await new Promise(r => setTimeout(r, 350));
+      responseText = localCognitiveEngine(query);
 
       thinkingHUD.classList.add('hidden');
 
@@ -1702,8 +1952,6 @@ If you suggest inspecting a specific section, append exactly one tag at the very
         targetSection = navMatch[1].toLowerCase();
         responseText = responseText.replace(/\[NAV:[A-Z]+\]/, '').trim();
       }
-
-      aiChatMemory.push({ role: "model", parts: [{ text: responseText }] });
 
       const aiBubble = document.createElement('div');
       aiBubble.className = "p-3 rounded-lg bg-sys-card border border-white/10 text-sys-primary mr-6";
@@ -1739,32 +1987,32 @@ If you suggest inspecting a specific section, append exactly one tag at the very
     }
 
     /* ----------------------------------------------------
-       05. CAPABILITY CANVAS & NODE DATA
+       06. CAPABILITY CANVAS & NODE DATA
        ---------------------------------------------------- */
     const nodeProofs = {
       'ML': {
-        title: 'MACHINE LEARNING',
-        evidence: 'Model Training, Evaluation & Hyperparameter Tuning',
-        details: 'Supervised/unsupervised algorithms, neural networks, loss function optimization, and model validation pipelines.',
-        repo: 'github.com/kishore/ml-foundations'
+        title: 'MACHINE LEARNING & DEEP LEARNING',
+        evidence: 'TensorFlow, CNNs, scikit-learn & Optimization',
+        details: 'Neural network training, activation/loss functions, MNIST CNN classification at OdugaaTech, and end-to-end predictive pipelines.',
+        repo: 'github.com/kishore-KC151204/ml-foundations'
       },
       'CV': {
         title: 'COMPUTER VISION',
-        evidence: 'Safe City AI & Gesture Tracking',
-        details: 'Custom YOLOv8 detection models, OpenCV RTSP streaming, MediaPipe 21-hand landmark geometry, frame queue latency reduction.',
-        repo: 'github.com/kishore/safecity-ai'
+        evidence: 'SafeCity AI & Real-Time Object Tracking',
+        details: 'YOLOv8 custom models, OpenCV RTSP streaming, sub-33ms frame latency optimization, and MediaPipe landmark tracking.',
+        repo: 'github.com/kishore-KC151204/safecity-ai'
       },
       'ROBOTICS': {
-        title: 'ROBOTICS & EMBEDDED',
+        title: 'ROBOTICS & EMBEDDED SYSTEMS',
         evidence: 'Personal Droid System (PDS)',
-        details: 'Raspberry Pi 4 vision intelligence coupled to ESP32 dual-core low-level motor driver via 400kHz I2C bus.',
-        repo: 'github.com/kishore/personal-droid-system'
+        details: 'Raspberry Pi 4 vision processing coupled to ESP32 dual-core low-level motor driver via 400kHz I2C bus.',
+        repo: 'github.com/kishore-KC151204/personal-droid-system'
       },
       'DATA': {
-        title: 'DATA SCIENCE & ANALYTICS',
-        evidence: 'Telemetry Analysis & Pipelines',
-        details: 'NumPy, Pandas, spatial tracking telemetry, and relational MySQL database indexing.',
-        repo: 'github.com/kishore/data-analytics'
+        title: 'DATA SCIENCE & BACKEND',
+        evidence: 'Pandas, NumPy, Flask REST & MySQL',
+        details: 'Data pattern analysis, relational MySQL schema design, and high-performance REST APIs for real-time model inference.',
+        repo: 'github.com/kishore-KC151204/data-pipelines'
       }
     };
 
@@ -1781,7 +2029,7 @@ If you suggest inspecting a specific section, append exactly one tag at the very
       const nodes = [
         { id: 'ML', label: 'Machine Learning', x: canvas.width * 0.3, y: canvas.height * 0.3, color: '#A855F7' },
         { id: 'CV', label: 'Computer Vision', x: canvas.width * 0.7, y: canvas.height * 0.3, color: '#0071E3' },
-        { id: 'ROBOTICS', label: 'Robotics', x: canvas.width * 0.3, y: canvas.height * 0.7, color: '#00C7B7' },
+        { id: 'ROBOTICS', label: 'Robotics & Embedded', x: canvas.width * 0.3, y: canvas.height * 0.7, color: '#00C7B7' },
         { id: 'DATA', label: 'Data Science', x: canvas.width * 0.7, y: canvas.height * 0.7, color: '#F5A623' }
       ];
 
@@ -1849,29 +2097,29 @@ If you suggest inspecting a specific section, append exactly one tag at the very
     }
 
     /* ----------------------------------------------------
-       06. PROJECT DEPTH DATA & X-RAY TOGGLE
+       07. PROJECT DEPTH DATA & X-RAY TOGGLE
        ---------------------------------------------------- */
     const depthData = {
       safecity: {
-        1: "<span class='text-sys-cyan font-bold'>[L1: WHAT IS IT?]</span><br/>Safe City AI is an automated public safety monitoring architecture using deep computer vision to identify hazardous events (accidents, violence, smoke) in real-time from CCTV streams.",
-        2: "<span class='text-sys-cyan font-bold'>[L2: HOW IT WORKS]</span><br/>High-definition RTSP streams are read by OpenCV. Video frames are forwarded to a customized YOLOv8 tensor model. When bounding box confidence exceeds 0.85, an alert event is posted to a Flask backend.",
-        3: "<span class='text-sys-cyan font-bold'>[L3: TECH STACK]</span><br/>YOLOv8 Custom Trained Model, OpenCV, MediaPipe, Python, Flask REST API, MySQL Database.",
-        4: "<span class='text-sys-cyan font-bold'>[L4: DECISIONS]</span><br/>OpenCV default buffer queues cause a 7-10 second video lag over time. Set buffer size = 1 and dropped backlog frames to guarantee true live real-time analysis.",
-        5: "<span class='text-sys-cyan font-bold'>[L5: NEXT ITERATION]</span><br/>1. Edge deployment on NVIDIA Jetson.<br/>2. Multi-camera Re-identification (ReID).<br/>3. Decouple ingestion using Apache Kafka."
+        1: "<span class='text-sys-cyan font-bold'>[L1: WHAT IS IT?]</span><br/>SafeCity AI is an automated public surveillance and safety monitoring system using computer vision to detect incidents, annotate live events, and log records for immediate emergency dispatch.",
+        2: "<span class='text-sys-cyan font-bold'>[L2: HOW IT WORKS]</span><br/>High-definition video feeds are captured via OpenCV. Frames are processed through a YOLOv8 model. When incident confidence exceeds 0.85, alerts trigger an automated emergency dashboard and Flask REST dispatch pipeline.",
+        3: "<span class='text-sys-cyan font-bold'>[L3: TECH STACK]</span><br/>YOLOv8, OpenCV, Python, Flask REST API, MySQL Relational Database, Real-Time Incident Dashboard.",
+        4: "<span class='text-sys-cyan font-bold'>[L4: DECISIONS]</span><br/>Standard frame buffering creates a 7-10s backlog in continuous streams. Setting the OpenCV buffer depth to 1 frame ensures real-time sub-33ms inference and zero drift.",
+        5: "<span class='text-sys-cyan font-bold'>[L5: NEXT ITERATION]</span><br/>1. Deployment to NVIDIA Jetson edge nodes.<br/>2. Multi-camera Re-identification (ReID).<br/>3. Real-time geo-mapping for emergency services."
       },
       pds: {
-        1: "<span class='text-sys-cyan font-bold'>[L1: WHAT IS IT?]</span><br/>Personal Droid System (PDS) is an autonomous intelligent robot combining machine vision, sensor fusion, and physical motor actuation.",
-        2: "<span class='text-sys-cyan font-bold'>[L2: HOW IT WORKS]</span><br/>Raspberry Pi 4 performs camera object tracking and high-level decisions. Motor PWM control loops and ultrasonic distance checks run in real-time on an ESP32 microcontroller via I2C.",
-        3: "<span class='text-sys-cyan font-bold'>[L3: TECH STACK]</span><br/>Raspberry Pi 4, ESP32 Microcontroller, Embedded C/C++, OpenCV, I2C/SPI Protocols, Ultrasonic Arrays.",
-        4: "<span class='text-sys-cyan font-bold'>[L4: DECISIONS]</span><br/>Running motor PWM timers directly on Linux OS caused jitter due to OS task preemption. Delegated real-time motor signals to ESP32 RTOS hardware.",
-        5: "<span class='text-sys-cyan font-bold'>[L5: NEXT ITERATION]</span><br/>1. 2D LiDAR SLAM integration.<br/>2. ROS2 communication node framework."
+        1: "<span class='text-sys-cyan font-bold'>[L1: WHAT IS IT?]</span><br/>Personal Droid System (PDS) is a dual-processor autonomous robot combining computer vision, sensor fusion, and low-latency motor control.",
+        2: "<span class='text-sys-cyan font-bold'>[L2: HOW IT WORKS]</span><br/>Raspberry Pi 4 acts as the high-level brain for object recognition and task logic, while an ESP32 microcontroller manages real-time motor PWM control and ultrasonic obstacle interrupts via an I2C bus.",
+        3: "<span class='text-sys-cyan font-bold'>[L3: TECH STACK]</span><br/>ESP32, Raspberry Pi 4, FreeRTOS, Embedded C++, OpenCV, I2C Protocol, Ultrasonic Sensor Arrays.",
+        4: "<span class='text-sys-cyan font-bold'>[L4: DECISIONS]</span><br/>Separating high-level computer vision on Linux from motor control on an ESP32 prevents OS task preemption jitter and guarantees hardware-level real-time safety stops.",
+        5: "<span class='text-sys-cyan font-bold'>[L5: NEXT ITERATION]</span><br/>1. 2D LiDAR SLAM mapping integration.<br/>2. ROS2 communication micro-nodes."
       },
       wacian: {
-        1: "<span class='text-sys-cyan font-bold'>[L1: WHAT IS IT?]</span><br/>WACIAN (Old English for 'to awaken') is an intelligent pre-work mental readiness platform designed to awaken domain knowledge and analytical thinking before work begins. Tagline: 'Awaken. Prepare. Perform.'",
-        2: "<span class='text-sys-cyan font-bold'>[L2: HOW IT WORKS]</span><br/>The user selects their professional domain and completes a 5-question adaptive warm-up that transitions them from passive browsing to focused cognitive problem-solving.",
-        3: "<span class='text-sys-cyan font-bold'>[L3: TECH STACK]</span><br/>Modern Modular JavaScript Architecture, LocalStorage Persistence, Adaptive Question Matrix, Responsive Design Tokens.",
-        4: "<span class='text-sys-cyan font-bold'>[L4: DECISIONS]</span><br/>WACIAN is intentionally not an exam platform. It is a quick cognitive activation ritual designed to take under 4 minutes to prevent user fatigue.",
-        5: "<span class='text-sys-cyan font-bold'>[L5: NEXT ITERATION]</span><br/>1. LLM-generated dynamic daily questions.<br/>2. Performance analytics &amp; calendar synchronization.<br/>3. Team productivity streak dashboards."
+        1: "<span class='text-sys-cyan font-bold'>[L1: WHAT IS IT?]</span><br/>WACIAN is an AI-driven predictive analysis and pre-work mental readiness platform engineered to transition users from passive browsing into focused, analytical flow state. Tagline: 'Awaken. Prepare. Perform.'",
+        2: "<span class='text-sys-cyan font-bold'>[L2: HOW IT WORKS]</span><br/>An advanced machine learning pipeline predicts complex pattern recognition accuracy, feeding an adaptive 5-question cognitive progression tailored to the user's specific engineering domain.",
+        3: "<span class='text-sys-cyan font-bold'>[L3: TECH STACK]</span><br/>Python, TensorFlow, Flask REST API, Responsive Design Tokens, Scalable Data Pipelines.",
+        4: "<span class='text-sys-cyan font-bold'>[L4: DECISIONS]</span><br/>Rather than functioning as an exhaustive exam, WACIAN is calibrated as an agile, 4-minute cognitive activation ritual to prime mental alertness without causing cognitive fatigue.",
+        5: "<span class='text-sys-cyan font-bold'>[L5: NEXT ITERATION]</span><br/>1. Dynamic LLM-generated daily problem trees.<br/>2. Productivity streak synchronization and calendar integrations."
       }
     };
 
@@ -1903,7 +2151,7 @@ If you suggest inspecting a specific section, append exactly one tag at the very
     }
 
     /* ----------------------------------------------------
-       07. LAB MODE BUFFER CHART
+       08. LAB MODE BUFFER CHART
        ---------------------------------------------------- */
     let fpsChartInstance = null;
     function initFpsChart() {
@@ -1949,7 +2197,7 @@ If you suggest inspecting a specific section, append exactly one tag at the very
     }
 
     /* ----------------------------------------------------
-       08. GESTURE DETECTION: MULTI-GESTURE CLASSIFIER & CAMERA TOGGLE
+       09. GESTURE DETECTION: MULTI-GESTURE CLASSIFIER
        ---------------------------------------------------- */
     let handTracker = null;
     let cameraStream = null;
@@ -1962,7 +2210,6 @@ If you suggest inspecting a specific section, append exactly one tag at the very
       const video = document.getElementById('gesture-video');
       const overlay = document.getElementById('gesture-overlay-text');
       const status = document.getElementById('gesture-active-status');
-      const navIndicator = document.getElementById('nav-gesture-indicator');
       const banner = document.getElementById('gesture-detected-banner');
 
       if (!systemState.cameraActive) {
@@ -2009,7 +2256,6 @@ If you suggest inspecting a specific section, append exactly one tag at the very
           btn.className = "px-5 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-mono text-xs font-bold transition-all flex items-center space-x-2";
           status.innerText = "LIVE VISION TRACKING";
           status.className = "px-2 py-0.5 rounded bg-sys-green text-black font-bold text-[10px]";
-          if (navIndicator) navIndicator.className = "w-1.5 h-1.5 rounded-full bg-sys-green pulse-dot";
           playAudio('confirm');
 
         } catch (err) {
@@ -2042,7 +2288,6 @@ If you suggest inspecting a specific section, append exactly one tag at the very
         btn.className = "px-5 py-3 bg-sys-blue text-white rounded-lg font-mono text-xs font-bold transition-all flex items-center space-x-2";
         status.innerText = "CAMERA STANDBY";
         status.className = "px-2 py-0.5 rounded bg-sys-elevated text-sys-secondary text-[10px]";
-        if (navIndicator) navIndicator.className = "w-1.5 h-1.5 rounded-full bg-sys-secondary";
         document.getElementById('hud-gesture').innerText = "NONE";
         playAudio('click');
       }
@@ -2149,7 +2394,7 @@ If you suggest inspecting a specific section, append exactly one tag at the very
     }
 
     /* ----------------------------------------------------
-       09. GITHUB CHARTS
+       10. GITHUB CHARTS
        ---------------------------------------------------- */
     function initTelemetryCharts() {
       const langCtx = document.getElementById('langChart');
@@ -2157,7 +2402,7 @@ If you suggest inspecting a specific section, append exactly one tag at the very
         new Chart(langCtx, {
           type: 'doughnut',
           data: {
-            labels: ['Python (AI/ML)', 'C/C++ (Embedded)', 'TypeScript', 'SQL/Data'],
+            labels: ['Python (AI/ML)', 'C/C++ (Embedded)', 'TypeScript / JS', 'SQL / Relational'],
             datasets: [{
               data: [50, 25, 15, 10],
               backgroundColor: ['#0071E3', '#00C7B7', '#A855F7', '#F5A623'],
@@ -2201,26 +2446,17 @@ If you suggest inspecting a specific section, append exactly one tag at the very
     }
 
     /* ----------------------------------------------------
-       10. 17 CERTIFICATES DYNAMIC GRID (VIEWABLE & DOWNLOADABLE)
+       11. CERTIFICATES DYNAMIC GRID
        ---------------------------------------------------- */
     const credentialsList = [
       { title: "Python Programming Professional", issuer: "Technical Academy", skills: "Object-Oriented Design, Concurrency, Algorithms", file: "python-programming.jpg" },
+      { title: "Web Application Development", issuer: "George Academy", skills: "Frontend & Backend Development, RESTful Architecture", file: "george-web-dev.pdf" },
+      { title: "Prompt Engineering for ChatGPT", issuer: "Great Learning", skills: "Generative AI, Contextual Prompting, LLMs", file: "great-learning-chatgpt.pdf" },
       { title: "Computer Vision Specialization", issuer: "Unified Mentor", skills: "YOLO, MediaPipe, OpenCV Matrix Filters", file: "unified-computer-vision.pdf" },
-      { title: "AI Ethics & Governance", issuer: "Unified Mentor", skills: "Algorithmic Bias, Model Transparency", file: "unified-ai-ethics.pdf" },
-      { title: "MongoDB AI Fundamentals 2025", issuer: "MongoDB University", skills: "Vector Embeddings, Document Store AI", file: "mongodb-ai-fundamentals-2025.pdf" },
-      { title: "Analytical Modeler Certification", issuer: "Certified Authority", skills: "Mathematical Modeling, Statistical Inference", file: "analytical-modeler.pdf" },
-      { title: "OpenRoads Designer Automation", issuer: "Bentley Systems", skills: "Geometric Modeling, Civil Digital Twin", file: "openroads-designer.pdf" },
-      { title: "CAD Building Environment", issuer: "Engineering Board", skills: "Spatial Modeling, Structural Parametric Design", file: "cad-building-environment.pdf" },
-      { title: "Robotics & Hardware Systems", issuer: "Infosys Springboard", skills: "Actuators, Kinematics, Sensor Loops", file: "infosys-robotics-course.pdf" },
-      { title: "LLM Parallelization & Scaled AI", issuer: "Infosys Springboard", skills: "Distributed Training, Tensor Sharding", file: "infosys-llm-parallelization.pdf" },
+      { title: "Machine Learning Foundations", issuer: "Unified Mentor", skills: "Gradient Descent, Classification, Supervised/Unsupervised", file: "unified-machine-learning.pdf" },
       { title: "MongoDB AI Vector Search", issuer: "MongoDB University", skills: "kNN Search, Semantic Indexing", file: "mongodb-ai-vector-search.pdf" },
       { title: "Robotics & Industrial Automation", issuer: "Unified Mentor", skills: "PID Controllers, Servo Interfacing", file: "unified-robotics-automation.pdf" },
-      { title: "Machine Learning Foundations", issuer: "Unified Mentor", skills: "Gradient Descent, Classification, Supervised/Unsupervised", file: "unified-machine-learning.pdf" },
-      { title: "Artificial Intelligence Masterclass", issuer: "ICT Academy", skills: "Neural Architectures, Computer Vision Foundations", file: "artificial-intelligence.jpg" },
-      { title: "Natural Language Processing (NLP)", issuer: "Unified Mentor", skills: "Tokenization, Word2Vec, Seq2Seq, Attention Networks", file: "unified-nlp.pdf" },
       { title: "Qualcomm AI Technical Foundations", issuer: "Qualcomm Academy", skills: "NPU Edge Computing, On-Device AI Acceleration", file: "qualcomm-ai-technical-foundations.pdf" },
-      { title: "Quantum Information Basics", issuer: "IBM Quantum", skills: "Qubits, Superposition, Quantum Entanglement", file: "ibm-basics-quantum-information.pdf" },
-      { title: "Quantum Information Image Record", issuer: "IBM Quantum", skills: "Visual Certificate Record", file: "ibm-basics-quantum-information.png" },
       { title: "AI Engineering Bootcamp", issuer: "NxtWave", skills: "End-to-end Machine Learning, Deep Neural Networks", file: "nxtwave-ai-bootcamp.png" }
     ];
 
@@ -2265,22 +2501,74 @@ If you suggest inspecting a specific section, append exactly one tag at the very
 
     function closeCertModal() {
       document.getElementById('cert-modal').classList.add('hidden');
-      document.getElementById('cert-preview-container').innerHTML = ''; // clear iframe memory
+      document.getElementById('cert-preview-container').innerHTML = '';
     }
 
+    /* ----------------------------------------------------
+       12. RESUME MODAL & PRINT/DOWNLOAD UTILITIES
+       ---------------------------------------------------- */
     function openResumeModal() {
       playAudio('click');
       document.getElementById('resume-modal').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
     }
 
     function closeResumeModal() {
       document.getElementById('resume-modal').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function downloadResumePDF() {
+      // Ensure the modal is visible and ready for print layout
+      openResumeModal();
+      setTimeout(() => {
+        window.print();
+      }, 250);
+    }
+
+    function copyToClipboard(text, btnElement) {
+      playAudio('click');
+      try {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+
+        const originalText = btnElement.innerText;
+        btnElement.innerText = "COPIED!";
+        btnElement.classList.add('text-sys-green');
+        setTimeout(() => {
+          btnElement.innerText = originalText;
+          btnElement.classList.remove('text-sys-green');
+        }, 2000);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     function handleContactSubmit(e) {
       e.preventDefault();
       playAudio('confirm');
-      document.getElementById('contact-success').classList.remove('hidden');
+      const input = document.getElementById('contact-message-input');
+      const val = input.value.trim();
+      const successDiv = document.getElementById('contact-success');
+      const btn = document.getElementById('transmit-btn');
+
+      if (!val) return;
+
+      btn.disabled = true;
+      btn.innerHTML = `<span>TRANSMITTING...</span>`;
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = `<span>TRANSMIT MESSAGE</span><span>→</span>`;
+        successDiv.classList.remove('hidden');
+        input.value = '';
+
+        window.location.href = `mailto:kishore15122004@gmail.com?subject=Project Inquiry / Role Opportunity&body=${encodeURIComponent(val)}`;
+      }, 800);
     }
 
     /* ----------------------------------------------------
@@ -2288,6 +2576,7 @@ If you suggest inspecting a specific section, append exactly one tag at the very
        ---------------------------------------------------- */
     window.addEventListener('DOMContentLoaded', () => {
       initThemeEngine();
+      initTypewriter();
       init3DAvatar();
       initCapabilityCanvas();
       initFpsChart();
@@ -2301,3 +2590,4 @@ If you suggest inspecting a specific section, append exactly one tag at the very
   </script>
 </body>
 </html>
+```
