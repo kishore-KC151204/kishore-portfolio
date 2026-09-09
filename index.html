@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
 <head>
@@ -50,6 +49,9 @@
   <!-- MediaPipe Hands & Camera Utils -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+  <!-- html2pdf for direct Resume Download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     /* Theme Tokens Engine */
@@ -159,97 +161,20 @@
       51%, 100% { opacity: 0; }
     }
 
-    /* ====================================================
-       CRITICAL: ATS-COMPLIANT PRINT & PDF FORMAT ENGINE
-       Eliminates multi-page overflow and blank pages
-       ==================================================== */
+    /* Fallback Print Media Query (Though JS handles exact PDF rendering) */
     @media print {
-      @page {
-        size: A4 portrait;
-        margin: 10mm 12mm;
-      }
+      @page { size: A4 portrait; margin: 10mm 12mm; }
       html, body {
-        width: 100% !important;
-        height: auto !important;
         background: #ffffff !important;
         color: #0f172a !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: visible !important;
         -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
       }
-      /* Hide all website elements */
-      header, main, #dev-hud, #terminal-modal, #cert-modal, .no-print {
-        display: none !important;
-      }
-      /* Ensure resume modal behaves as pure document page */
+      header, main, #dev-hud, #terminal-modal, #cert-modal, .no-print { display: none !important; }
       #resume-modal {
-        position: static !important;
-        display: block !important;
-        background: transparent !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        overflow: visible !important;
-        box-shadow: none !important;
-        border: none !important;
-        backdrop-filter: none !important;
+        position: static !important; display: block !important;
+        background: transparent !important; padding: 0 !important;
       }
-      #resume-dialog-box {
-        position: static !important;
-        max-width: 100% !important;
-        max-height: none !important;
-        border: none !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        background: #ffffff !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: visible !important;
-      }
-      #resume-sheet {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        background: #ffffff !important;
-        color: #0f172a !important;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-        font-size: 9pt !important;
-        line-height: 1.35 !important;
-      }
-      #resume-sheet * {
-        color: #0f172a !important;
-        border-color: #cbd5e1 !important;
-        background-color: transparent !important;
-      }
-      #resume-sheet h1 {
-        color: #000000 !important;
-        font-size: 20pt !important;
-        line-height: 1.1 !important;
-        letter-spacing: -0.02em !important;
-      }
-      #resume-sheet h2 {
-        color: #0284c7 !important;
-        font-size: 9.5pt !important;
-        border-bottom: 1.5px solid #0284c7 !important;
-        padding-bottom: 2px !important;
-        margin-top: 10px !important;
-        margin-bottom: 5px !important;
-        font-weight: 700 !important;
-        letter-spacing: 0.05em !important;
-      }
-      .resume-section-block {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-      a {
-        text-decoration: none !important;
-        color: #0284c7 !important;
-      }
+      #resume-dialog-box { border: none !important; box-shadow: none !important; }
     }
   </style>
 </head>
@@ -310,7 +235,6 @@
 
       <!-- Toggles & Quick Actions -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        <!-- Resume Trigger in Navigation -->
         <button onclick="openResumeModal()" class="px-2.5 py-1 rounded text-xs font-mono border border-sys-cyan/40 text-sys-cyan hover:bg-sys-cyan/10 transition-all flex items-center space-x-1.5" title="View & Download Kishore's Resume">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           <span class="font-medium">RESUME</span>
@@ -375,13 +299,12 @@
         
         <div class="lg:col-span-7 space-y-6">
           
-          <!-- ANIMATION MOVING TYPEWRITER BADGE (REPLACED CGPA) -->
-          <div class="inline-flex items-center space-x-2.5 px-3.5 py-1.5 rounded-full bg-sys-elevated border border-sys-blue/30 font-mono text-xs text-sys-cyan shadow-sm max-w-full">
-            <span class="w-2 h-2 rounded-full bg-sys-green pulse-dot flex-shrink-0"></span>
-            <span class="text-sys-secondary font-semibold flex-shrink-0 text-[10px] tracking-wider uppercase">STATUS:</span>
-            <span class="text-sys-primary font-medium tracking-wide flex items-center truncate">
-              <span id="typewriter-text" class="text-sys-cyan font-semibold"></span>
-              <span class="typing-cursor"></span>
+          <!-- FIXED: Typewriter badge now uses rounded-2xl and allows text wrapping without overflow -->
+          <div class="inline-flex items-start sm:items-center space-x-2.5 px-4 py-2 rounded-2xl bg-sys-elevated border border-sys-blue/30 font-mono text-xs text-sys-cyan shadow-sm w-fit max-w-full">
+            <span class="w-2 h-2 rounded-full bg-sys-green pulse-dot flex-shrink-0 mt-1 sm:mt-0"></span>
+            <span class="text-sys-secondary font-semibold flex-shrink-0 text-[10px] tracking-wider uppercase mt-0.5 sm:mt-0">STATUS:</span>
+            <span class="text-sys-primary font-medium tracking-wide leading-relaxed inline-block break-words">
+              <span id="typewriter-text" class="text-sys-cyan font-semibold"></span><span class="typing-cursor"></span>
             </span>
           </div>
 
@@ -394,8 +317,9 @@
             </p>
           </div>
 
+          <!-- FIXED: Updated Hero tagline as requested -->
           <p class="text-base sm:text-lg text-sys-secondary max-w-xl font-light leading-relaxed">
-            Driven AI &amp; Data Science student and aspiring AI/ML Engineer with a proven track record of designing and deploying intelligent, data-driven systems.
+            I build systems that make machines understand the physical world.
           </p>
 
           <div class="pt-4 flex flex-wrap items-center gap-4">
@@ -442,7 +366,6 @@
           <div class="relative w-full max-w-md aspect-square bg-sys-card/50 rounded-2xl border border-white/10 overflow-hidden flex items-center justify-center group">
             <div id="atom-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
             
-            <!-- REPLACED ATOM_PHYSICS WITH Nav_Atom -->
             <div class="absolute top-4 left-4 font-mono text-[10px] text-sys-secondary bg-sys-surface/80 px-2.5 py-1 rounded border border-white/10 backdrop-blur-sm pointer-events-none">
               DIGITAL GUIDE // <span id="avatar-pose-label" class="text-sys-cyan font-bold tracking-wide">Nav_Atom</span>
             </div>
@@ -478,13 +401,13 @@
             </div>
             <div>
               <h3 class="font-mono text-sm font-bold text-sys-primary">ASK KISHORE // COGNITIVE AGENT</h3>
-              <p class="text-xs text-sys-secondary">Domain Reasoning, Math, Machine Learning, and Portfolio Intelligence</p>
+              <p class="text-xs text-sys-secondary">Mathematical Evaluation, Sentiment Analysis, and Portfolio Intelligence</p>
             </div>
           </div>
           
           <div class="flex items-center space-x-2">
             <span id="ai-status-tag" class="text-[10px] font-mono text-sys-cyan bg-sys-surface px-2.5 py-1 rounded border border-sys-cyan/30">
-              OUT-OF-THE-BOX HYBRID MODE
+              COGNITIVE NLP ENGINE // ONLINE
             </span>
           </div>
         </div>
@@ -492,33 +415,33 @@
         <div id="ai-chat-window" class="bg-sys-surface border border-white/10 rounded-xl p-4 font-mono text-xs h-72 overflow-y-auto space-y-3 leading-relaxed">
           <div class="p-3 rounded-lg bg-sys-card border border-white/10 text-sys-secondary">
             <span class="text-sys-cyan font-bold block mb-1">&gt; KISHORE AI:</span>
-            Hello! I am Kishore's digital engineering assistant. Ask me about his machine learning &amp; computer vision projects (Safe City, WACIAN, PDS), solve a math or engineering calculation, or query his experience and Deep Learning internship at OdugaaTech.
+            Hello! I am Kishore's digital engineering assistant. Ask me to solve a math problem, analyze domain topics, or chat about his machine learning &amp; computer vision projects!
           </div>
         </div>
 
         <div id="ai-thinking-indicator" class="hidden font-mono text-xs text-sys-cyan items-center space-x-2">
           <span class="pulse-dot inline-block w-2 h-2 rounded-full bg-sys-cyan"></span>
-          <span id="ai-thinking-text">Analyzing query and synthesizing response...</span>
+          <span id="ai-thinking-text">Synthesizing semantic response...</span>
         </div>
 
         <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
           <span class="text-sys-secondary text-[10px] mr-1">QUICK PROMPTS:</span>
-          <button onclick="askKishoreAI('What was Kishore\'s role at OdugaaTech?')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
-            "Internship at OdugaaTech"
+          <button onclick="askKishoreAI('Hi! How are you doing today?')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
+            "Friendly Chat"
           </button>
-          <button onclick="askKishoreAI('Explain the WACIAN readiness concept')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
-            "Explain WACIAN Platform"
+          <button onclick="askKishoreAI('What is the derivative concept in CNNs?')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
+            "Domain Knowledge"
           </button>
-          <button onclick="askKishoreAI('Calculate: If inference is 28ms, what is max theoretical FPS?')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
-            "Calculate 28ms to FPS"
+          <button onclick="askKishoreAI('Calculate: (150 * 4.5) / 2')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
+            "Test Math Engine"
           </button>
           <button onclick="askKishoreAI('Tell me about SafeCity AI surveillance.')" class="px-2.5 py-1 rounded bg-sys-elevated hover:bg-sys-blue/30 border border-white/10 text-sys-primary hover:text-sys-cyan transition-all">
-            "SafeCity AI Architecture"
+            "Portfolio Search"
           </button>
         </div>
 
         <form id="ai-form" onsubmit="handleAISubmit(event)" class="flex gap-2">
-          <input type="text" id="ai-input" class="w-full bg-sys-surface border border-white/10 rounded-lg px-4 py-2.5 font-mono text-xs text-sys-primary focus:outline-none focus:border-sys-blue transition-colors" placeholder="Ask anything: math, ML algorithms, computer vision, or Kishore's experience..." />
+          <input type="text" id="ai-input" class="w-full bg-sys-surface border border-white/10 rounded-lg px-4 py-2.5 font-mono text-xs text-sys-primary focus:outline-none focus:border-sys-blue transition-colors" placeholder="Ask anything: math, ML algorithms, computer vision, or general chat..." />
           <button type="submit" class="px-5 py-2.5 bg-sys-blue hover:bg-sys-blue/90 text-white font-mono text-xs rounded-lg transition-colors font-medium">
             ASK
           </button>
@@ -775,9 +698,9 @@
                 ACHIEVEMENTS
               </h2>
               <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
-                <li>Won 3rd prize in Intra-College Hackathon &amp; Visionary Innovators by Supporticon Hackfest (AI Accident Detection).</li>
-                <li>Participated in Generative AI Application Workshop by ISTE-BNY &amp; presented research paper at national conference.</li>
-                <li>Project Expo Coordinator (pre-final year) &amp; Student Secretary, AI &amp; DS Dept. (final year).</li>
+                <li>Won 3rd prize in Intra-College Hackathon (AI Accident Detection).</li>
+                <li>Participated in Generative AI Workshop by ISTE-BNY &amp; presented at national conference.</li>
+                <li>Student Secretary, AI &amp; DS Dept. (final year).</li>
               </ul>
             </div>
           </div>
@@ -1209,15 +1132,19 @@
             </div>
             <div class="p-3 bg-sys-surface rounded border border-white/10 space-y-1">
               <div class="text-sys-cyan font-bold text-xs">✌️ Peace / V-Sign</div>
-              <div class="text-sys-secondary text-[11px]">Jump to Projects</div>
+              <div class="text-sys-secondary text-[11px]">Scroll Up / Projects</div>
             </div>
             <div class="p-3 bg-sys-surface rounded border border-white/10 space-y-1">
               <div class="text-sys-cyan font-bold text-xs">🤏 Pinch Fingers</div>
               <div class="text-sys-secondary text-[11px]">Toggle Project X-Ray</div>
             </div>
-            <div class="p-3 bg-sys-surface rounded border border-white/10 space-y-1 col-span-2">
+            <div class="p-3 bg-sys-surface rounded border border-white/10 space-y-1">
               <div class="text-sys-cyan font-bold text-xs">✊ Closed Fist</div>
-              <div class="text-sys-secondary text-[11px]">Toggle Engineering Lab Mode</div>
+              <div class="text-sys-secondary text-[11px]">Close Modals / Lab Mode</div>
+            </div>
+            <div class="p-3 bg-sys-surface rounded border border-white/10 space-y-1">
+              <div class="text-sys-cyan font-bold text-xs">👎 Thumb Down</div>
+              <div class="text-sys-secondary text-[11px]">Turn Off Camera</div>
             </div>
           </div>
 
@@ -1516,7 +1443,7 @@
     }
 
     /* ----------------------------------------------------
-       02. TYPEWRITER ANIMATION FOR AVAILABLE ROLES
+       02. TYPEWRITER ANIMATION (Fixed for mobile wrapping)
        ---------------------------------------------------- */
     const typewriterPhrase = "Available for AI and ML Engineer, Data Science, DevOps, Agentic AI, and Full Stack";
     let twIndex = 0;
@@ -1535,8 +1462,7 @@
         twIndex++;
         speed = 45;
       } else if (!twIsDeleting && twIndex === typewriterPhrase.length) {
-        // Pause at full text
-        speed = 3500;
+        speed = 3500; // Pause at end
         twIsDeleting = true;
       } else if (twIsDeleting && twIndex > 0) {
         twIndex--;
@@ -1612,7 +1538,7 @@
         if (hudTheme) hudTheme.innerText = 'DARK';
       }
 
-      if (avatarMesh && avatarMesh.material) {
+      if (typeof avatarMesh !== 'undefined' && avatarMesh && avatarMesh.material) {
         avatarMesh.material.color.setHex(mode === 'light' ? 0x0071E3 : 0x141518);
       }
       initCapabilityCanvas();
@@ -1732,7 +1658,7 @@
     });
 
     /* ----------------------------------------------------
-       04. THREE.JS SPATIAL ATOM PHYSICS ANIMATION (Nav_Atom)
+       04. THREE.JS SPATIAL ATOM PHYSICS ANIMATION
        ---------------------------------------------------- */
     let avatarScene, avatarCamera, avatarRenderer, avatarMesh, mainGroup;
     let orbit1, orbit2, orbit3;
@@ -1757,7 +1683,6 @@
 
       const isLight = systemState.themeMode === 'light';
       
-      // Central Nucleus
       const headGeo = new THREE.SphereGeometry(0.5, 64, 64);
       const headMat = new THREE.MeshStandardMaterial({ 
         color: isLight ? 0x0071E3 : 0x141518, 
@@ -1769,7 +1694,6 @@
       avatarMesh = new THREE.Mesh(headGeo, headMat);
       mainGroup.add(avatarMesh);
 
-      // Orbital Rings
       const ringGeo = new THREE.TorusGeometry(1.5, 0.015, 32, 100);
       const ringMat = new THREE.MeshBasicMaterial({ color: 0x00C7B7, transparent: true, opacity: 0.5 });
       
@@ -1787,7 +1711,6 @@
       orbit3.rotation.x = Math.PI / 4;
       mainGroup.add(orbit3);
 
-      // Electrons
       const electronGeo = new THREE.SphereGeometry(0.08, 16, 16);
       const elMat = new THREE.MeshBasicMaterial({ color: 0x0071E3 });
       
@@ -1801,7 +1724,6 @@
 
       avatarScene.add(mainGroup);
 
-      // Lighting
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
       avatarScene.add(ambientLight);
 
@@ -1818,7 +1740,6 @@
         targetMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
       });
 
-      // Interactive Click Physics
       container.addEventListener('mousedown', () => { isClickingAvatar = true; playAudio('click'); });
       container.addEventListener('mouseup', () => { isClickingAvatar = false; });
       container.addEventListener('mouseleave', () => { isClickingAvatar = false; });
@@ -1829,19 +1750,14 @@
         requestAnimationFrame(animate);
         const t = clock.getElapsedTime();
 
-        // 1. Organic Floating (Bobbing)
         mainGroup.position.y = Math.sin(t * 2) * 0.08;
-
-        // 2. Smooth Cursor Steering for entire Atom
         mainGroup.rotation.y += (targetMouseX * 0.8 - mainGroup.rotation.y) * 0.08;
         mainGroup.rotation.x += (-targetMouseY * 0.5 - mainGroup.rotation.x) * 0.08;
 
-        // 3. Independent Orbital Rotations
         orbit1.rotation.x += 0.005;
         orbit2.rotation.y += 0.007;
         orbit3.rotation.z += 0.006;
 
-        // 4. Electron Trajectories
         const r = 1.5;
         
         const pos1 = new THREE.Vector3(Math.cos(t * 1.5) * r, Math.sin(t * 1.5) * r, 0);
@@ -1859,7 +1775,6 @@
         pos3.applyMatrix4(mainGroup.matrixWorld);
         e3.position.copy(pos3);
 
-        // 5. Spring-loaded Click Scaling
         const targetScale = isClickingAvatar ? 0.80 : 1.0;
         mainGroup.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.15);
 
@@ -1869,7 +1784,7 @@
     }
 
     /* ----------------------------------------------------
-       05. ASK KISHORE COGNITIVE AI ASSISTANT
+       05. ASK KISHORE COGNITIVE AI ASSISTANT (ADVANCED MOCK)
        ---------------------------------------------------- */
     function focusKishoreAI() {
       document.getElementById('kishore-ai-section').scrollIntoView({ behavior: 'smooth' });
@@ -1884,39 +1799,60 @@
     function localCognitiveEngine(query) {
       const q = query.toLowerCase();
 
-      if (q.includes('calculate') || q.includes('fps') || q.match(/\d+[\s\+\-\*\/]\d+/)) {
-        if (q.includes('28ms') || (q.includes('28') && q.includes('fps'))) {
-          return "Calculation: Theoretical Maximum FPS = 1000ms / 28ms ≈ 35.71 FPS. In practice, with a single-frame buffer and display overhead, SafeCity AI runs steadily at ~30 FPS.";
-        }
-        try {
-          const sanitized = query.replace(/[^0-9+\-*/().]/g, '');
-          if (sanitized && sanitized.length > 1) {
-            const mathResult = Function(`'use strict'; return (${sanitized})`)();
-            return `Computed result for (${sanitized}) = ${mathResult}`;
-          }
-        } catch(e) {}
+      // Sentiment & Chitchat Analysis
+      const greetings = ['hi', 'hello', 'hey', 'greetings', 'how are you', 'what is up', 'chat'];
+      const positive = ['good', 'awesome', 'great', 'cool', 'nice', 'love', 'amazing', 'perfect'];
+      
+      if (greetings.some(g => q.includes(g)) && q.length < 30) {
+        return "Hello there! 👋 I'm Kishore's AI Assistant. I'm doing great, functioning at optimal capacity. How can I help you explore Kishore's engineering portfolio today?";
+      }
+      if (positive.some(p => q.includes(p)) && q.length < 40) {
+        return "I appreciate the positive feedback! Kishore designed me to be as helpful and engaging as possible. Feel free to check out his robotics or computer vision projects. [NAV:PROJECTS]";
       }
 
+      // Mathematical Evaluation Engine
+      if (q.includes('calculate') || q.includes('solve') || q.match(/[\d]+[\s]*[\+\-\*\/]+[\s]*[\d]+/)) {
+        if (q.includes('28ms') || (q.includes('28') && q.includes('fps'))) {
+          return "Calculation: Theoretical Maximum FPS = 1000ms / 28ms ≈ 35.71 FPS. In practice, considering display overhead, SafeCity AI runs steadily at ~30 FPS.";
+        }
+        try {
+          // Safe extraction of mathematical expressions
+          const sanitized = query.replace(/[^0-9+\-*/().]/g, '');
+          if (sanitized && sanitized.length > 1) {
+            // Using Function constructor as a safer eval alternative for basic math
+            const mathResult = Function(`'use strict'; return (${sanitized})`)();
+            return `I have computed the result: ${sanitized} = **${mathResult}**`;
+          }
+        } catch(e) {
+          return "I detected a mathematical query, but the syntax seems invalid. Please try formatting it like: (150 * 4) / 2.";
+        }
+      }
+
+      // Domain & Portfolio Knowledge
+      if (q.includes('derivative') || q.includes('cnn') || q.includes('gradient')) {
+        return "In Convolutional Neural Networks (CNNs), derivatives (gradients) are calculated during backpropagation to update the weights of the filters. This minimizes the loss function, allowing the network to 'learn' features like edges and textures. Kishore applied this practically during his MNIST digit classification project at OdugaaTech. [NAV:IDENTITY]";
+      }
       if (q.includes('odugaatech') || q.includes('odugaa') || q.includes('internship') || q.includes('mnist')) {
         return "At OdugaaTech in Salem, Kishore completed an intensive 15-day Deep Learning internship covering neural network fundamentals, activation & loss functions, and gradient-based optimization, independently building and training a CNN on the MNIST handwritten digit dataset. [NAV:IDENTITY]";
       }
       if (q.includes('wacian') || q.includes('awaken')) {
         return "WACIAN ('Awaken. Prepare. Perform.') is Kishore's AI-driven analysis and pre-work mental readiness platform. It transitions users from passive browsing to focused cognitive problem-solving via a 5-question adaptive warm-up. [NAV:PROJECTS]";
       }
-      if (q.includes('safe city') || q.includes('safecity') || q.includes('cctv')) {
-        return "SafeCity AI performs real-time incident detection using YOLOv8 and OpenCV. By setting buffer size to 1, Kishore eliminated cumulative stream lag, achieving real-time incident logging and emergency alerting. [NAV:PROJECTS]";
+      if (q.includes('safe city') || q.includes('safecity') || q.includes('cctv') || q.includes('surveillance')) {
+        return "SafeCity AI performs real-time incident detection using YOLOv8 and OpenCV. By setting the frame buffer size to 1, Kishore eliminated cumulative stream lag, achieving real-time incident logging and emergency alerting at <33ms latency. [NAV:PROJECTS]";
       }
       if (q.includes('droid') || q.includes('pds') || q.includes('robot') || q.includes('esp32')) {
         return "The Personal Droid System (PDS) is a dual-processor embedded system: a Raspberry Pi 4 handles vision and intelligence while an ESP32 manages real-time FreeRTOS motor PWM and sensor interrupts over a 400kHz I2C bus. [NAV:PROJECTS]";
       }
       if (q.includes('resume') || q.includes('cv') || q.includes('download')) {
-        return "You can view or download Kishore's verified ATS resume directly by clicking the 'VIEW RESUME' or 'DOWNLOAD RESUME (PDF)' buttons. [NAV:IDENTITY]";
+        return "You can view or download Kishore's verified ATS resume directly by clicking the 'VIEW RESUME' or 'DOWNLOAD RESUME (PDF)' buttons in the Hero or Identity section. [NAV:IDENTITY]";
       }
       if (q.includes('contact') || q.includes('email') || q.includes('github') || q.includes('linkedin')) {
         return "You can reach Kishore directly via email at kishore15122004@gmail.com, explore his code on GitHub (github.com/kishore-KC151204), or connect on LinkedIn (linkedin.com/in/kishore-c04). [NAV:CONTACT]";
       }
 
-      return `Analyzing query regarding "${query}". Kishore C is an AI/ML Engineer and B.Tech AI & Data Science student available for AI & ML, Data Science, DevOps, Agentic AI, and Full Stack roles. Feel free to explore his projects, inspect his interactive resume, or test the live lab and gesture engine! [NAV:PROJECTS]`;
+      // Default Intelligent Fallback
+      return `Analyzing semantic query regarding "${query}". As an AI assistant, I can confirm Kishore C is an AI/ML Engineer and B.Tech AI & Data Science student available for Machine Learning, DevOps, and Full Stack roles. Feel free to explore his projects or test the live lab and gesture engine! [NAV:PROJECTS]`;
     }
 
     async function handleAISubmit(e) {
@@ -1942,7 +1878,8 @@
       let responseText = "";
       let targetSection = "";
 
-      await new Promise(r => setTimeout(r, 350));
+      // Simulate natural thinking delay
+      await new Promise(r => setTimeout(r, 600));
       responseText = localCognitiveEngine(query);
 
       thinkingHUD.classList.add('hidden');
@@ -1968,6 +1905,9 @@
           clearInterval(timer);
           playAudio('confirm');
 
+          // Highlight target text like markdown bold (optional polish)
+          typeTarget.innerHTML = typeTarget.innerHTML.replace(/\*\*(.*?)\*\*/g, '<span class="text-sys-cyan font-bold">$1</span>');
+
           if (targetSection) {
             setTimeout(() => {
               const targetEl = document.getElementById(targetSection);
@@ -1979,7 +1919,7 @@
             }, 600);
           }
         }
-      }, 12);
+      }, 15);
     }
 
     function escapeHtml(str) {
@@ -2197,7 +2137,7 @@
     }
 
     /* ----------------------------------------------------
-       09. GESTURE DETECTION: MULTI-GESTURE CLASSIFIER
+       09. GESTURE DETECTION (Upgraded Accuracy + Thumb Down)
        ---------------------------------------------------- */
     let handTracker = null;
     let cameraStream = null;
@@ -2343,16 +2283,22 @@
     }
 
     function classifyAndExecuteGesture(lm) {
+      // Finger State Booleans (Are they extended?)
       const indexUp = lm[8].y < lm[6].y;
       const middleUp = lm[12].y < lm[10].y;
       const ringUp = lm[16].y < lm[14].y;
       const pinkyUp = lm[20].y < lm[18].y;
 
+      // Thumb Down Logic: Thumb tip (4) is below its base (2) and index is not extended
+      const thumbDown = (lm[4].y > lm[2].y) && (lm[4].y > lm[3].y) && !indexUp && !middleUp && !ringUp && !pinkyUp;
+
       const pinchDist = Math.hypot(lm[4].x - lm[8].x, lm[4].y - lm[8].y);
 
       let gesture = "Tracking";
 
-      if (pinchDist < 0.055) {
+      if (thumbDown) {
+        gesture = "Thumb Down (Camera Off)";
+      } else if (pinchDist < 0.055) {
         gesture = "Pinch (Inspect X-Ray)";
       } else if (indexUp && middleUp && ringUp && pinkyUp) {
         gesture = "Open Palm (Scroll to Top)";
@@ -2374,22 +2320,36 @@
 
       setTimeout(() => {
         gestureCooldown = false;
-      }, 1200);
+      }, 1200); // 1.2s cooldown to prevent firing actions rapidly
     }
 
     function executeGestureAction(g) {
       playAudio('confirm');
 
-      if (g.includes("Open Palm")) {
+      if (g.includes("Camera Off")) {
+        // Slight delay for visual confirmation before shutting off
+        setTimeout(() => {
+          if (systemState.cameraActive) {
+            document.getElementById('camera-gesture-btn').click();
+          }
+        }, 500);
+      } else if (g.includes("Open Palm")) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (g.includes("Point")) {
-        window.scrollBy({ top: 450, behavior: 'smooth' });
+        window.scrollBy({ top: 500, behavior: 'smooth' });
       } else if (g.includes("Peace")) {
         document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
       } else if (g.includes("Pinch")) {
-        toggleXRay('safecity');
+        toggleXRay('safecity'); // Toggles X-ray for first project as demo
       } else if (g.includes("Closed Fist")) {
-        document.getElementById('lab-toggle-btn').click();
+        // Toggle lab mode or close modals
+        if (!document.getElementById('resume-modal').classList.contains('hidden')) {
+           closeResumeModal();
+        } else if (!document.getElementById('cert-modal').classList.contains('hidden')) {
+           closeCertModal();
+        } else {
+           document.getElementById('lab-toggle-btn').click();
+        }
       }
     }
 
@@ -2519,11 +2479,67 @@
     }
 
     function downloadResumePDF() {
-      // Ensure the modal is visible and ready for print layout
-      openResumeModal();
-      setTimeout(() => {
-        window.print();
-      }, 250);
+      playAudio('confirm');
+      
+      const originalSheet = document.getElementById('resume-sheet');
+      
+      // 1. Create an off-screen container that forces LIGHT mode rendering
+      const container = document.createElement('div');
+      container.className = 'light'; 
+      container.style.position = 'absolute';
+      container.style.left = '-10000px';
+      container.style.top = '0';
+      container.style.width = '800px'; // Force desktop width for clean A4 layout
+      container.style.backgroundColor = '#ffffff'; 
+      container.style.padding = '30px';
+      
+      // 2. Clone the content
+      const clone = originalSheet.cloneNode(true);
+      clone.style.overflow = 'visible';
+      clone.style.maxHeight = 'none';
+      clone.style.height = 'auto';
+      
+      // 3. Force dark text on the clone to prevent white-on-white text in dark mode
+      clone.querySelectorAll('*').forEach(el => {
+        if (el.classList.contains('text-sys-primary') || el.classList.contains('text-white')) {
+          el.style.setProperty('color', '#0f172a', 'important');
+        } else if (el.classList.contains('text-sys-secondary')) {
+          el.style.setProperty('color', '#475569', 'important');
+        } else if (el.classList.contains('text-sys-cyan')) {
+          el.style.setProperty('color', '#0284c7', 'important'); 
+        } else if (el.classList.contains('text-sys-amber')) {
+          el.style.setProperty('color', '#b45309', 'important'); 
+        } else if (el.classList.contains('text-sys-green')) {
+          el.style.setProperty('color', '#15803d', 'important'); 
+        }
+        
+        // Fix border colors for the print version
+        if (el.classList.contains('border-white/10')) {
+          el.style.setProperty('border-color', '#cbd5e1', 'important');
+        }
+      });
+
+      container.appendChild(clone);
+      document.body.appendChild(container);
+
+      // 4. PDF Configuration for perfect A4 fit
+      const opt = {
+        margin:       [10, 5, 10, 5], // Top, Right, Bottom, Left in mm
+        filename:     'Kishore_C_Resume.pdf',
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { 
+          scale: 2, 
+          useCORS: true, 
+          windowWidth: 800,
+          scrollY: 0
+        },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      // 5. Generate and clean up container
+      html2pdf().set(opt).from(container).save().then(() => {
+        document.body.removeChild(container);
+      });
     }
 
     function copyToClipboard(text, btnElement) {
@@ -2590,4 +2606,3 @@
   </script>
 </body>
 </html>
-```
