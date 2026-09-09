@@ -617,7 +617,7 @@
               INTERNSHIP
             </h2>
             <div class="flex justify-between items-baseline font-mono text-xs">
-              <span class="font-bold text-sys-primary">Deep Learning Internship — <span class="text-sys-blue font-semibold">OdugaaTech, Salem</span></span>
+              <span class="font-bold text-sys-primary">Deep Learning Internship — OdugaaTech, Salem</span>
               <span class="text-sys-secondary text-[11px]">15 Days</span>
             </div>
             <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
@@ -651,7 +651,7 @@
             <div class="space-y-0.5">
               <div class="flex justify-between items-baseline font-mono text-xs">
                 <span class="font-bold text-sys-primary">Personal Droid System — Team Project</span>
-                <span class="text-sys-amber text-[11px] font-semibold">Ongoing</span>
+                <span class="text-sys-primary text-[11px] font-bold">Ongoing</span>
               </div>
               <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
                 <li>Architected a dual-processor embedded hardware system to drive a custom control and vision pipeline.</li>
@@ -690,6 +690,9 @@
               <ul class="list-disc list-inside text-sys-secondary font-sans text-xs space-y-0.5 pl-1">
                 <li>Web Application Development — George Academy</li>
                 <li>Prompt Engineering for ChatGPT — Great Learning</li>
+                <li>Computer Vision Specialization — Unified Mentor</li>
+                <li>Machine Learning Foundations — Unified Mentor</li>
+                <li>AI Engineering Bootcamp — NxtWave</li>
               </ul>
             </div>
 
@@ -2478,68 +2481,83 @@
       document.body.classList.remove('overflow-hidden');
     }
 
-    function downloadResumePDF() {
+    async function downloadResumePDF() {
       playAudio('confirm');
       
-      const originalSheet = document.getElementById('resume-sheet');
+      const modal = document.getElementById('resume-modal');
+      const element = document.getElementById('resume-sheet');
       
-      // 1. Create an off-screen container that forces LIGHT mode rendering
-      const container = document.createElement('div');
-      container.className = 'light'; 
-      container.style.position = 'absolute';
-      container.style.left = '-10000px';
-      container.style.top = '0';
-      container.style.width = '800px'; // Force desktop width for clean A4 layout
-      container.style.backgroundColor = '#ffffff'; 
-      container.style.padding = '30px';
+      if (!element) return;
       
-      // 2. Clone the content
-      const clone = originalSheet.cloneNode(true);
-      clone.style.overflow = 'visible';
-      clone.style.maxHeight = 'none';
-      clone.style.height = 'auto';
+      // Ensure the modal is visible so html2canvas can capture it
+      if (modal.classList.contains('hidden')) {
+          openResumeModal();
+      }
+
+      // 1. Store original constraints
+      const originalOverflow = element.style.overflow;
+      const originalMaxHeight = element.style.maxHeight;
+      const originalHeight = element.style.height;
+      const originalPadding = element.style.padding;
       
-      // 3. Force dark text on the clone to prevent white-on-white text in dark mode
-      clone.querySelectorAll('*').forEach(el => {
-        if (el.classList.contains('text-sys-primary') || el.classList.contains('text-white')) {
-          el.style.setProperty('color', '#0f172a', 'important');
-        } else if (el.classList.contains('text-sys-secondary')) {
-          el.style.setProperty('color', '#475569', 'important');
-        } else if (el.classList.contains('text-sys-cyan')) {
-          el.style.setProperty('color', '#0284c7', 'important'); 
-        } else if (el.classList.contains('text-sys-amber')) {
-          el.style.setProperty('color', '#b45309', 'important'); 
-        } else if (el.classList.contains('text-sys-green')) {
-          el.style.setProperty('color', '#15803d', 'important'); 
-        }
+      // 2. Remove constraints and scroll to top for html2canvas
+      element.scrollTop = 0;
+      element.style.overflow = 'visible';
+      element.style.maxHeight = 'none';
+      element.style.height = 'auto';
+      element.style.padding = '25px 35px'; // Padding for PDF margins
+      
+      // 3. Temporarily force light mode to prevent white-on-white blank text
+      const htmlEl = document.documentElement;
+      const wasDark = htmlEl.classList.contains('dark');
+      
+      if (wasDark) {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
         
-        // Fix border colors for the print version
-        if (el.classList.contains('border-white/10')) {
-          el.style.setProperty('border-color', '#cbd5e1', 'important');
+        // Sync 3D avatar material if it exists to avoid visual glitch
+        if (typeof avatarMesh !== 'undefined' && avatarMesh && avatarMesh.material) {
+          avatarMesh.material.color.setHex(0x0071E3);
         }
-      });
+      }
+      
+      // 4. Force browser reflow & wait for styles to apply
+      await new Promise(resolve => setTimeout(resolve, 300));
 
-      container.appendChild(clone);
-      document.body.appendChild(container);
-
-      // 4. PDF Configuration for perfect A4 fit
+      // 5. Configure html2pdf
       const opt = {
-        margin:       [10, 5, 10, 5], // Top, Right, Bottom, Left in mm
+        margin:       0,
         filename:     'Kishore_C_Resume.pdf',
         image:        { type: 'jpeg', quality: 1.0 },
         html2canvas:  { 
           scale: 2, 
           useCORS: true, 
-          windowWidth: 800,
-          scrollY: 0
+          scrollY: 0,
+          backgroundColor: '#ffffff'
         },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // 5. Generate and clean up container
-      html2pdf().set(opt).from(container).save().then(() => {
-        document.body.removeChild(container);
-      });
+      // 6. Generate and save
+      try {
+        await html2pdf().set(opt).from(element).save();
+      } catch (err) {
+        console.error('PDF Generation Error:', err);
+      } finally {
+         // 7. Revert all styles and theme back to original state seamlessly
+         element.style.overflow = originalOverflow;
+         element.style.maxHeight = originalMaxHeight;
+         element.style.height = originalHeight;
+         element.style.padding = originalPadding;
+         
+         if (wasDark) {
+           htmlEl.classList.remove('light');
+           htmlEl.classList.add('dark');
+           if (typeof avatarMesh !== 'undefined' && avatarMesh && avatarMesh.material) {
+             avatarMesh.material.color.setHex(0x141518);
+           }
+         }
+      }
     }
 
     function copyToClipboard(text, btnElement) {
